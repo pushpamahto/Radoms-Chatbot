@@ -1197,6 +1197,7 @@ function initCountrySelector() {
     const countryList = countrySelector.querySelector('.country-list');
     const countrySearch = countrySelector.querySelector('.country-search');
     const phoneInput = document.getElementById('user-phone');
+    const clearSearch = document.getElementById('clear-search');
     
     // Populate country list
     function populateCountryList(filter = '') {
@@ -1249,6 +1250,7 @@ function initCountrySelector() {
             countrySearch.value = ''; //clear search input
             populateCountryList(''); //Reset to show all countries
             countrySearch.focus();
+            clearSearch.style.display = countrySearch.value ? 'block' : 'none'; // to clear X button 
         }
     });
     
@@ -1256,7 +1258,32 @@ function initCountrySelector() {
     countrySearch.addEventListener('input', (e) => {
         populateCountryList(e.target.value);
     });
+
+
+
     
+    // Show/hide clear button based on input
+countrySearch.addEventListener('input', function(e) {
+  clearSearch.style.display = this.value ? 'block' : 'none';
+  populateCountryList(e.target.value); // Keep existing functionality
+});
+
+// Clear search when X is clicked
+clearSearch.addEventListener('click', function() {
+  countrySearch.value = '';
+  countrySearch.focus();
+  clearSearch.style.display = 'none';
+  populateCountryList(''); // Reset to show all countries
+});
+
+// Also add this to handle cases where user clears with backspace
+countrySearch.addEventListener('keyup', function() {
+  clearSearch.style.display = this.value ? 'block' : 'none';
+});
+    
+
+
+
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         if (!countrySelector.contains(e.target)) {

@@ -200,7 +200,7 @@ body.show-user-form .user-info-popup {
 }
 
 .search-container {
-    
+    position: relative; /* needed for absolute position of clear button */
     padding: 10px;
     border-bottom: 1px solid #eee;
     position: sticky;
@@ -212,11 +212,31 @@ body.show-user-form .user-info-popup {
     width: 100%;
     height: 23px;
     padding: 8px 12px;
+    padding-right: 30px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 0.9rem;
     box-sizing: border-box;
 }
+
+
+
+.clear-search {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+  font-size: 16px;
+  padding: 0 5px;
+  /* display: none; */
+}
+
+.clear-search:hover {
+  color: #333;
+}
+
 
 .country-list {
     padding: 5px 0;
@@ -261,10 +281,6 @@ body.show-user-form .user-info-popup {
 }
 
 /* mobile */
-
-
-
-
 
 #user-info-submit {
     padding: 14px;

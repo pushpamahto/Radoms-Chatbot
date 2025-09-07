@@ -1,8 +1,4 @@
 
-
-// phone
-
-
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -34,12 +30,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Phone number is required'],
     trim: true,
-    // validate: {
-    //   validator: function(v) {
-    //     return /^\+[1-9]\d{1,14}$/.test(v);
-    //   },
-    //   message: props => `${props.value} is not a valid phone number with country code!`
-    // }
+    
   },
   
   // Country code
