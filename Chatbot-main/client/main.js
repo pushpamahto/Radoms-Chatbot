@@ -1,122 +1,4 @@
 
-// const chatBody = document.querySelector(".chat-body");
-// const messageInput = document.querySelector(".message-input");
-// const sendMessageButton = document.querySelector("#send-message");
-// const fileInput = document.querySelector("#file-input");
-
-// const pdfPreviewContainer = document.querySelector("#pdf-preview");
-// const fileUploadWrapper = document.querySelector(".file-upload-wrapper");
-// const fileCancelButton = document.querySelector("#file-cancel");
-
-// const chatbotToggler = document.querySelector("#chatbot-toggler");
-// const closeChatbot = document.querySelector("#close-chatbot");
-
-// const userInfoPopup = document.querySelector(".user-info-popup");
-// const userInfoForm = document.querySelector("#user-info-form");
-// const userNameInput = document.querySelector("#user-name");
-// const userEmailInput = document.querySelector("#user-email");
-// const emailError = document.querySelector("#email-error");
-
-// const chatHistoryButton = document.querySelector("#chat-history");
-// const chatHistorySidebar = document.querySelector(".chat-history-sidebar");
-// const closeHistoryButton = document.querySelector("#close-history");
-// const historyList = document.querySelector(".history-list");
-// const deleteAllHistoryButton = document.querySelector("#delete-all-history");
-// const voiceAssistButton = document.querySelector("#voice-assist");
-
-
-// const API_KEY ="AIzaSyDZBoAeUlaMF8aTGTGU1ttpiKN7pJjL3n0";
-// // const API_KEY = "AIzaSyCND8_k9nMfIrl8OhpVAYXoMGwh7dlR3Xs";
-// const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
-// const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
-
-// let currentChatId = null;
-// let chatHistory = [];
-// let userInfo = null;
-// let pendingPdfFile = null;
-
-// const userData = {
-//     message: null,
-//     file: {
-//         data: null,
-//         mime_type: null,
-//         uri: null,
-//         rawFile: null
-//     }
-// };
-
-// const initialInputHeight = messageInput.scrollHeight;
-// let recognition;
-// let isListening = false;
-// let activePdfUploads = {};
-
-// // Email validation function
-// const isValidEmail = (email) => {
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     return emailRegex.test(email);
-// };
-
-// // Validate email on input
-// userEmailInput.addEventListener("input", () => {
-//     const email = userEmailInput.value.trim();
-    
-//     if (email && !isValidEmail(email)) {
-//         userEmailInput.classList.add("error");
-//         emailError.style.display = "block";
-//     } else {
-//         userEmailInput.classList.remove("error");
-//         emailError.style.display = "none";
-//     }
-// });
-
-// // Validate email on form submission
-// userInfoForm.addEventListener("submit", (e) => {
-//     e.preventDefault();
-//     const name = userNameInput.value.trim();
-//     const email = userEmailInput.value.trim();
-    
-//     // Validate email
-//     if (!isValidEmail(email)) {
-//         userEmailInput.classList.add("error");
-//         emailError.style.display = "block";
-//         userEmailInput.focus();
-//         return;
-//     }
-    
-//     if (!name || !email) return;
-    
-//     userInfo = {
-//         name,
-//         email
-//     };
-//     loadChatHistory();
-//     document.body.classList.remove("show-user-form");
-//     document.body.classList.add("show-chatbot");
-//     userNameInput.value = "";
-//     userEmailInput.value = "";
-    
-//     // Reset error state
-//     userEmailInput.classList.remove("error");
-//     emailError.style.display = "none";
-    
-//     if (chatHistory.length > 0) {
-//         renderChatHistory();
-//         const sortedHistory = [...chatHistory].sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
-//         loadChat(sortedHistory[0].id);
-//     } else {
-//         startNewChat();
-//     }
-// });
-
-// -------above is without phone number code --------------------------------
-
-
-
-
-
-
-
-// demo test for phone number
 const baseUrl = "http://localhost:3007";
 const chatBody = document.querySelector(".chat-body");
 const messageInput = document.querySelector(".message-input");
@@ -285,17 +167,6 @@ userInfoForm.addEventListener("submit", (e) => {
         startNewChat();
     }
 });
-
-
-
-
-
-
-
-
-
-
-
 
 const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
@@ -1071,17 +942,7 @@ voiceAssistButton.addEventListener("click", () => {
     }
 });
 
-
-
-
-
-// countries
-
-
 // Country data - all countries with flags and dial codes
-
-
-
 
 const countries = 
 
@@ -1325,8 +1186,6 @@ const countries =
 ];
 
 
-
-
 // Sort countries alphabetically by name
 countries.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -1386,6 +1245,9 @@ function initCountrySelector() {
         e.stopPropagation();
         countrySelector.classList.toggle('open');
         if (countrySelector.classList.contains('open')) {
+
+            countrySearch.value = ''; //clear search input
+            populateCountryList(''); //Reset to show all countries
             countrySearch.focus();
         }
     });
@@ -1416,8 +1278,6 @@ function initCountrySelector() {
 document.addEventListener('DOMContentLoaded', function() {
     initCountrySelector();
     
-    // Rest of your existing JavaScript code would go here
-    // ... (all the other JavaScript from your original file) ...
 });
 
 // Phone number validation
@@ -1456,14 +1316,6 @@ document.getElementById('user-phone').addEventListener('input', function() {
     this.parentElement.classList.remove('error');
     document.getElementById('phone-error').style.display = 'none';
 });
-
-
-
-
-
-
-
-
 
 
 injectHistoryStyles();

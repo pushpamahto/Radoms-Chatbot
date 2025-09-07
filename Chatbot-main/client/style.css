@@ -121,11 +121,6 @@ body.show-user-form .user-info-popup {
 }
 
 
-
-
-
-
-
 /* email validation error styles */
 .form-field input.error {
     border-color: #ff0000;
@@ -138,9 +133,6 @@ body.show-user-form .user-info-popup {
     margin-top: 4px;
     display: none;
 }
-/* email validation error styles */
-
-
 
 
 /* --- Phone Input Field Styling (Corrected) --- */
@@ -399,19 +391,15 @@ body.show-chatbot .chatbot-popup {
     align-items: flex-end;
 }
 
-
  .chat-body .message .message-text{
     padding: 12px 16px;
     max-width: 100%;
     font-size: 0.95rem;
 }  
 
-
-
 .chat-body .bot-message.thinking .message-text{
     padding: 6px 16px;
 }
-
 
  
 .chat-body .bot-message .message-text{
@@ -420,18 +408,11 @@ body.show-chatbot .chatbot-popup {
 }  
 
 
-
-
-
-
 .chat-body .user-message .message-text{
     background: rgb(154, 131, 2);
     color: #fff;
     border-radius: 13px 13px 3px 13px; 
 } 
-
-
-
 
 
 /* for attach file */
@@ -724,9 +705,6 @@ body.show-emoji-picker em-emoji-picker {
     background: #eee;
 }
 
-
-
-
  .chat-history-sidebar {
     position: fixed;
     top: 14%;
@@ -873,12 +851,6 @@ body.show-chat-history .chat-history-sidebar {
 }
 
 
-
-
-
-
-
-
 /* email exist error show */
 .error-message {
     color: #ff0000;
@@ -886,9 +858,6 @@ body.show-chat-history .chat-history-sidebar {
     margin-top: 4px;
     display: none;
 }
-
-
-
 
 /*  for delete all file button */
 
@@ -1150,15 +1119,6 @@ body.show-chat-history .chat-history-sidebar {
 }
   
 
-
-   
-
-
-
-
-
-
-
 /* Add this to your existing media queries */
 @media (max-width: 498px) {
     .delete-confirmation-alert {
@@ -1168,10 +1128,6 @@ body.show-chat-history .chat-history-sidebar {
 }
 
 
-
-
-/*-----------media query--------- */
-
   @media (max-width:498px) {
     #chatbot-toggler {
         right: 20px;
@@ -1180,8 +1136,6 @@ body.show-chat-history .chat-history-sidebar {
         height:35px;
         padding: 20px 20px ;
     }
-
-
 
     /* provide details */
 
@@ -1197,9 +1151,6 @@ body.show-chat-history .chat-history-sidebar {
         overflow: hidden;
     }
 
-
-
-    
     .chatbot-popup { 
         right:15px;
         bottom: 80px;
@@ -1230,8 +1181,6 @@ body.show-chat-history .chat-history-sidebar {
         opacity: 0;
     }
 
-    
-
     .chat-history-sidebar {
     position: fixed;
     top: 12%;
@@ -1248,11 +1197,7 @@ body.show-chat-history .chat-history-sidebar {
     flex-direction: column;
     border-radius: 20px;
 }
-    
-
 } 
-
-
 
 /* For screens 499px and larger */
 @media (min-width: 499px) and (max-width: 768px) {
@@ -1263,7 +1208,6 @@ body.show-chat-history .chat-history-sidebar {
         width: 50px;
         height: 50px;
     }
-
 
     .chatbot-popup{
     
@@ -1278,10 +1222,6 @@ body.show-chat-history .chat-history-sidebar {
         overflow: hidden;
     }
 
-
-
-
-    
     .user-info-popup {
         right: 40px;
         bottom: 100px;
@@ -1352,32 +1292,4 @@ body.show-chat-history .chat-history-sidebar {
 }
 
 
-/* Responsive adjustments */
-/* @media (max-width: 498px) {
-    .chat-history-sidebar {
-        width: 90%;
-        right: -100%;
-        margin-right: 5%;
-        height: 70%;
-        top: 12%;
-    }
-    
-    .chat-history-sidebar .history-list li {
-        padding: 10px 15px;
-    }
-    
-    .chat-title {
-        font-size: 0.85rem;
-    }
-    
-    .chat-time {
-        font-size: 0.7rem;
-    }
-    
-    .delete-chat-item {
-        font-size: 1rem;
-    }
-}
- */
 
-/*  real style css */
