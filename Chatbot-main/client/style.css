@@ -134,7 +134,6 @@ body.show-user-form .user-info-popup {
     display: none;
 }
 
-
 /* --- Phone Input Field Styling (Corrected) --- */
 
 .phone-input-container {
@@ -219,8 +218,6 @@ body.show-user-form .user-info-popup {
     box-sizing: border-box;
 }
 
-
-
 .clear-search {
   position: absolute;
   right: 20px;
@@ -230,13 +227,12 @@ body.show-user-form .user-info-popup {
   color: #999;
   font-size: 16px;
   padding: 0 5px;
-  /* display: none; */
+ 
 }
 
 .clear-search:hover {
   color: #333;
 }
-
 
 .country-list {
     padding: 5px 0;
@@ -285,7 +281,6 @@ body.show-user-form .user-info-popup {
     border-color: #ff4d4f;
 }
 
-
 .error-message{
     display: none;
     color: #ff4d4f;
@@ -295,7 +290,6 @@ body.show-user-form .user-info-popup {
 }
 
 /* mobile */
-
 
 #user-info-submit {
     padding: 14px;
@@ -890,7 +884,6 @@ body.show-chat-history .chat-history-sidebar {
     display: none;
 }
 
-/*  for delete all file button */
 
 /* Delete Confirmation Alert Styles */
 .delete-confirmation-alert {
@@ -902,7 +895,6 @@ body.show-chat-history .chat-history-sidebar {
     background: #f2efcb;
     border-radius: 12px;
     padding: 15px;
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     z-index: 10;
     text-align: center;
@@ -967,9 +959,6 @@ body.show-chat-history .chat-history-sidebar {
         transform: translateX(-50%) translateY(0);
     }
 }
-
-
- /* --- PDF Upload Styles --- */
 
  /* --- PDF PREVIEW STYLES (IN FOOTER) --- */
 
@@ -1150,15 +1139,13 @@ body.show-chat-history .chat-history-sidebar {
 }
   
 
-/* Add this to your existing media queries */
+/*  media queries */
 @media (max-width: 498px) {
     .delete-confirmation-alert {
         width: calc(100% - 30px);
         bottom: 70px;
     }
 }
-
-
   @media (max-width:498px) {
     #chatbot-toggler {
         right: 20px;
@@ -1169,7 +1156,6 @@ body.show-chat-history .chat-history-sidebar {
     }
 
     /* provide details */
-
     .user-info-popup { 
         right:15px;
         bottom: 80px;
@@ -1193,17 +1179,13 @@ body.show-chat-history .chat-history-sidebar {
         position: fixed;
         overflow: hidden;
     }
-
     .chatbot-popup .chat-header {
         padding: 12px 15px;
-
     }
-
     .chat-body {
         height: calc(90% - 55px);
         padding: 25px 15px;
     }
-
     .chat-footer {
         padding: 10px 15px 15px;
     }
@@ -1211,7 +1193,6 @@ body.show-chat-history .chat-history-sidebar {
     .chat-form .file-upload-wrapper.file-uploaded #file-cancel {
         opacity: 0;
     }
-
     .chat-history-sidebar {
     position: fixed;
     top: 12%;
@@ -1219,7 +1200,6 @@ body.show-chat-history .chat-history-sidebar {
     margin-right: 3.5%;
     height: 70%;
     width: 350px;
-    /* width: 250px; */
     background: #fff;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 998;
