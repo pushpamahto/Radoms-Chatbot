@@ -28,8 +28,11 @@ Sunday: Closed
 
 Contact Information:
 Email: info@radomsdigital.com
-Phone: +91 9876543210
-Address: 123 Tech Park, Sector 15, Noida, Uttar Pradesh 201301, India
+WhatsApp Number: +91 94157 70571
+Phone: 0120-5150892
+Address: O 1234, Floor 12, Gaur City Centre,
+Gaur Chowk, West, Sector 4,
+Greater Noida, UP – 203207
 
 FAQs:
 General:
@@ -665,6 +668,86 @@ const createWelcomeMessage = () => {
 
 // origial generate bot code
 
+const generateBotResponse = async (incomingMessageDiv) => {
+    const messageElement = incomingMessageDiv.querySelector(".message-text");
+    const parts = [];
+    if (userData.message) parts.push({
+        text: userData.message
+    });
+    if (userData.file.uri) {
+        parts.push({
+            file_data: {
+                mime_type: userData.file.mime_type,
+                file_uri: userData.file.uri
+            }
+        });
+    } else if (userData.file.data) {
+        parts.push({
+            inline_data: {
+                mime_type: userData.file.mime_type,
+                data: userData.file.data
+            }
+        });
+    }
+    const requestBody = {
+        contents: [{
+            parts
+        }]
+    };
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    };
+    let botResponseText = "";
+    let formattedResponse = "";
+    try {
+        const response = await fetch(GEMINI_API_URL, requestOptions);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error.message || `API Error: ${response.status}`);
+        }
+        const data = await response.json();
+        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
+        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
+        botResponseText = rawText;
+        messageElement.innerHTML = formattedResponse;
+    } catch (error) {
+        console.error("API Error:", error);
+        botResponseText = `Oops! Something went wrong: ${error.message}. Please check your API key and try again.`;
+        formattedResponse = botResponseText;
+        messageElement.innerText = botResponseText;
+        messageElement.style.color = "#ff0000";
+    } finally {
+        const currentChat = chatHistory.find(chat => chat.id === currentChatId);
+        if (currentChat) {
+            currentChat.messages.push({
+                sender: "bot",
+                type: "text",
+                content: botResponseText,
+                formattedContent: formattedResponse
+            });
+            currentChat.lastActive = Date.now();
+            saveChatHistory();
+            renderChatHistory();
+        }
+        
+        userData.file = { data: null, mime_type: null, uri: null, rawFile: null };
+
+        incomingMessageDiv.classList.remove("thinking");
+        chatBody.scrollTo({
+            top: chatBody.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+};
+
+
+
+// test custom generate code
+
 // const generateBotResponse = async (incomingMessageDiv) => {
 //     const messageElement = incomingMessageDiv.querySelector(".message-text");
 //     const parts = [];
@@ -686,11 +769,25 @@ const createWelcomeMessage = () => {
 //             }
 //         });
 //     }
+    
+//     // Add Radoms Digital information as context
+//     const systemInstruction = {
+//         parts: [{
+//             text: `You are a customer support chatbot for Radoms Digital. Below is information about the company. Use this information to answer any questions about Radoms Digital:
+
+// ${radomsInfo}
+
+// For any questions about Radoms Digital, respond based on the information above. For other questions, respond normally.`
+//         }]
+//     };
+    
 //     const requestBody = {
 //         contents: [{
 //             parts
-//         }]
+//         }],
+//         systemInstruction: systemInstruction
 //     };
+    
 //     const requestOptions = {
 //         method: "POST",
 //         headers: {
@@ -698,6 +795,7 @@ const createWelcomeMessage = () => {
 //         },
 //         body: JSON.stringify(requestBody)
 //     };
+    
 //     let botResponseText = "";
 //     let formattedResponse = "";
 //     try {
@@ -741,99 +839,6 @@ const createWelcomeMessage = () => {
 //     }
 // };
 
-
-// test custom generate code
-
-const generateBotResponse = async (incomingMessageDiv) => {
-    const messageElement = incomingMessageDiv.querySelector(".message-text");
-    const parts = [];
-    if (userData.message) parts.push({
-        text: userData.message
-    });
-    if (userData.file.uri) {
-        parts.push({
-            file_data: {
-                mime_type: userData.file.mime_type,
-                file_uri: userData.file.uri
-            }
-        });
-    } else if (userData.file.data) {
-        parts.push({
-            inline_data: {
-                mime_type: userData.file.mime_type,
-                data: userData.file.data
-            }
-        });
-    }
-    
-    // Add Radoms Digital information as context
-    const systemInstruction = {
-        parts: [{
-            text: `You are a customer support chatbot for Radoms Digital. Below is information about the company. Use this information to answer any questions about Radoms Digital:
-
-${radomsInfo}
-
-For any questions about Radoms Digital, respond based on the information above. For other questions, respond normally.`
-        }]
-    };
-    
-    const requestBody = {
-        contents: [{
-            parts
-        }],
-        systemInstruction: systemInstruction
-    };
-    
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-    };
-    
-    let botResponseText = "";
-    let formattedResponse = "";
-    try {
-        const response = await fetch(GEMINI_API_URL, requestOptions);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error.message || `API Error: ${response.status}`);
-        }
-        const data = await response.json();
-        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
-        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
-        botResponseText = rawText;
-        messageElement.innerHTML = formattedResponse;
-    } catch (error) {
-        console.error("API Error:", error);
-        botResponseText = `Oops! Something went wrong: ${error.message}. Please check your API key and try again.`;
-        formattedResponse = botResponseText;
-        messageElement.innerText = botResponseText;
-        messageElement.style.color = "#ff0000";
-    } finally {
-        const currentChat = chatHistory.find(chat => chat.id === currentChatId);
-        if (currentChat) {
-            currentChat.messages.push({
-                sender: "bot",
-                type: "text",
-                content: botResponseText,
-                formattedContent: formattedResponse
-            });
-            currentChat.lastActive = Date.now();
-            saveChatHistory();
-            renderChatHistory();
-        }
-        
-        userData.file = { data: null, mime_type: null, uri: null, rawFile: null };
-
-        incomingMessageDiv.classList.remove("thinking");
-        chatBody.scrollTo({
-            top: chatBody.scrollHeight,
-            behavior: "smooth"
-        });
-    }
-};
 // ---- custom generatebot code --------
 
 
