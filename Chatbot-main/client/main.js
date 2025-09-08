@@ -4,14 +4,11 @@ const chatBody = document.querySelector(".chat-body");
 const messageInput = document.querySelector(".message-input");
 const sendMessageButton = document.querySelector("#send-message");
 const fileInput = document.querySelector("#file-input");
-
 const pdfPreviewContainer = document.querySelector("#pdf-preview");
 const fileUploadWrapper = document.querySelector(".file-upload-wrapper");
 const fileCancelButton = document.querySelector("#file-cancel");
-
 const chatbotToggler = document.querySelector("#chatbot-toggler");
 const closeChatbot = document.querySelector("#close-chatbot");
-
 const userInfoPopup = document.querySelector(".user-info-popup");
 const userInfoForm = document.querySelector("#user-info-form");
 const userNameInput = document.querySelector("#user-name");
@@ -19,14 +16,13 @@ const userEmailInput = document.querySelector("#user-email");
 const emailError = document.querySelector("#email-error");
 const userPhoneInput = document.querySelector("#user-phone");
 const phoneError = document.querySelector("#phone-error");
-
 const chatHistoryButton = document.querySelector("#chat-history");
 const chatHistorySidebar = document.querySelector(".chat-history-sidebar");
 const closeHistoryButton = document.querySelector("#close-history");
 const historyList = document.querySelector(".history-list");
 const deleteAllHistoryButton = document.querySelector("#delete-all-history");
 const voiceAssistButton = document.querySelector("#voice-assist");
-
+// API key
 const API_KEY = "AIzaSyDZBoAeUlaMF8aTGTGU1ttpiKN7pJjL3n0";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
@@ -1265,9 +1261,6 @@ function initCountrySelector() {
         populateCountryList(e.target.value);
     });
 
-
-
-    
     // Show/hide clear button based on input
 countrySearch.addEventListener('input', function(e) {
   clearSearch.style.display = this.value ? 'block' : 'none';
@@ -1287,9 +1280,6 @@ countrySearch.addEventListener('keyup', function() {
   clearSearch.style.display = this.value ? 'block' : 'none';
 });
     
-
-
-
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         if (!countrySelector.contains(e.target)) {
@@ -1312,44 +1302,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initCountrySelector();
     
 });
-
-// Phone number validation
-function validatePhoneNumber(phone, countryCode) {
-    // Basic validation - you might want to implement more specific validation per country
-    const phoneRegex = /^[+]?[0-9]{8,15}$/;
-    return phoneRegex.test(phone);
-}
-
-// Add event listener for form submission
-document.getElementById('user-info-form').addEventListener('submit', function(e) {
-    const phoneInput = document.getElementById('user-phone');
-    const phoneError = document.getElementById('phone-error');
-    const countrySelector = document.getElementById('country-selector');
-    const selectedCountryCode = countrySelector.getAttribute('data-selected-code');
-    const selectedCountry = countries.find(country => country.code === selectedCountryCode);
-    
-    const phoneNumber = phoneInput.value.trim();
-    
-    if (!validatePhoneNumber(phoneNumber)) {
-        e.preventDefault();
-        phoneError.style.display = 'block';
-        phoneInput.parentElement.classList.add('error');
-        return;
-    }
-    
-    // Format the complete phone number with country code
-    const completePhoneNumber = selectedCountry.dialCode + phoneNumber;
-    console.log('Complete phone number:', completePhoneNumber);
-    
-    // You can store this in your form data or use it as needed
-});
-
-// Add input event to clear error
-document.getElementById('user-phone').addEventListener('input', function() {
-    this.parentElement.classList.remove('error');
-    document.getElementById('phone-error').style.display = 'none';
-});
-
 
 injectHistoryStyles();
 setupVoiceRecognition();

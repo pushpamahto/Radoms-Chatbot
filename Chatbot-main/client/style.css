@@ -280,7 +280,22 @@ body.show-user-form .user-info-popup {
     font-size: 0.95rem;
 }
 
+/* test error phone */
+.phome-input-container.error {
+    border-color: #ff4d4f;
+}
+
+
+.error-message{
+    display: none;
+    color: #ff4d4f;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    
+}
+
 /* mobile */
+
 
 #user-info-submit {
     padding: 14px;
