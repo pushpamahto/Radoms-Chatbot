@@ -54,8 +54,7 @@ const userSchema = new mongoose.Schema({
   }
 }, {
   timestamps: false,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  
 });
 
 // Virtual property to get user's initials
@@ -63,21 +62,6 @@ userSchema.virtual('initials').get(function() {
   return this.name.split(' ').map(n => n[0]).join('').toUpperCase();
 });
 
-// Middleware to update timestamps before saving
-userSchema.pre('save', function(next) {
-  if (!this.createdAt) {
-    this.createdAt = new Date().toLocaleString('en-IN', { 
-      timeZone: 'Asia/Kolkata',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
-  next();
-});
 
 // Static method to find users by name pattern
 userSchema.statics.findByName = function(name) {
