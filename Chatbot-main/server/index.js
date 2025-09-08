@@ -48,7 +48,6 @@ app.get('/users', async (req, res) => {
     res.status(500).json({ message: 'Error fetching users', error: error.message });
   }
 });
-
 // Start server
 const PORT = process.env.PORT || 3007;
 app.listen(PORT, () => {

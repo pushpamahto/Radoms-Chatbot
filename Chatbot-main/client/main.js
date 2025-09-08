@@ -1,25 +1,21 @@
-
-// custom info code for test
-
+// custom info code for
 const radomsInfo = `
-
 General Business Information:
 Company Name: Radoms Digital
 Website: https://www.radomsdigital.com/
 Industry: Digital Solutions & IT Services
-Founded: 2022 (2+ years in business)
-Happy Customers: 10+ satisfied clients globally
+Happy Customers: 50+ satisfied clients globally
 
 About Us:
-Radoms Digital is a full-service digital agency specializing in web development, mobile apps, UI/UX design, and digital marketing. We transform ideas into powerful digital experiences.
+Radoms Digital is a premier IT company specializing in website development, mobile app creation, UI/UX design, and digital marketing. We are dedicated to transforming innovative ideas into powerful, scalable, and impactful digital experiences that drive growth.
 
 Core Services:
-1. Web Development (React, Angular, Node.js)
-2. Mobile App Development (iOS & Android)
-3. UI/UX Design
-4. Digital Marketing (SEO, PPC, Social Media)
-5. E-commerce Solutions
-6. Cloud Solutions
+1. Website Development: Custom websites, web applications, and portals using MERN & MEAN stacks (React, Angular, Node.js, Express.js).
+2. Mobile App Development: Native and cross-platform apps for iOS & Android using Flutter and React Native.
+3. UI/UX Design: User-centric interface design, wireframing, prototyping, and design systems.
+4. Digital Marketing: Comprehensive strategies including SEO, SEM/PPC, Social Media Marketing, and Content Marketing.
+5. E-commerce Solutions: Custom online stores, marketplace integrations, and payment gateway setups.
+6. Cloud & DevOps: Cloud migration, AWS/Azure services, and CI/CD pipeline setup.
 
 Working Hours:
 Monday to Saturday: 10:00 AM to 7:00 PM (IST)
@@ -29,78 +25,17 @@ Sunday: Closed
 Contact Information:
 Email: info@radomsdigital.com
 WhatsApp Number: +91 94157 70571
-Phone: 0120-5150892
+Phone: +91 120-5150892
 Address: O 1234, Floor 12, Gaur City Centre,
 Gaur Chowk, West, Sector 4,
 Greater Noida, UP – 203207
 
+Social Media Links:
+LinkedIn: https://www.linkedin.com/company/radomsdigital/
+
 FAQs:
-General:
-What services does Radoms Digital offer?
 
-We offer web development, mobile apps, UI/UX design, digital marketing, e-commerce solutions, and cloud services.
-How long has Radoms Digital been in business?
-
-We've been delivering digital solutions since 2018 (over 6 years).
-Can I see your portfolio?
-
-Yes! Visit our website at https://www.radomsdigital.com/portfolio
-Do you work with international clients?
-
-Absolutely! We serve clients globally with remote collaboration.
-
-Projects:
-What technologies do you use for web development?
-
-We primarily use React, Angular, Node.js, and modern JavaScript frameworks.
-How long does a typical website project take?
-
-Basic websites take 2-4 weeks, complex projects may take 8-12 weeks.
-Do you provide maintenance after project completion?
-
-Yes, we offer flexible maintenance packages.
-Can you redesign my existing website?
-
-Certainly! We specialize in website revamps and modernization.
-
-Pricing:
-What's your pricing model?
-
-We offer project-based pricing and hourly rates depending on requirements.
-Do you provide free consultations?
-
-Yes, we offer free 30-minute consultations for new projects.
-Are there any hidden costs?
-
-No, we provide transparent pricing with detailed estimates.
-
-Client Support:
-How can I track my project progress?
-
-We provide regular updates via email and project management tools.
-What if I need changes during development?
-
-We accommodate reasonable changes during development phases.
-How do you handle project communication?
-
-We assign a dedicated project manager for smooth communication.
-
-Tone Instructions:
-Conciseness: Respond in short, informative sentences.
-Formality: Use friendly yet professional language.
-Clarity: Explain technical terms when necessary.
-Approachability: Maintain a helpful, solution-oriented tone.
-Example: "Thanks for your interest in Radoms Digital! We'd be happy to discuss your project requirements."
-
-Success Stories:
-- Built e-commerce platform for fashion brand (300% revenue growth)
-- Developed healthcare app with 50,000+ downloads
-- Redesigned corporate website with 200% traffic increase
 `;
-
-
-
-
 
 
 const baseUrl = "http://localhost:3007";
@@ -668,86 +603,6 @@ const createWelcomeMessage = () => {
 
 // origial generate bot code
 
-const generateBotResponse = async (incomingMessageDiv) => {
-    const messageElement = incomingMessageDiv.querySelector(".message-text");
-    const parts = [];
-    if (userData.message) parts.push({
-        text: userData.message
-    });
-    if (userData.file.uri) {
-        parts.push({
-            file_data: {
-                mime_type: userData.file.mime_type,
-                file_uri: userData.file.uri
-            }
-        });
-    } else if (userData.file.data) {
-        parts.push({
-            inline_data: {
-                mime_type: userData.file.mime_type,
-                data: userData.file.data
-            }
-        });
-    }
-    const requestBody = {
-        contents: [{
-            parts
-        }]
-    };
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody)
-    };
-    let botResponseText = "";
-    let formattedResponse = "";
-    try {
-        const response = await fetch(GEMINI_API_URL, requestOptions);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error.message || `API Error: ${response.status}`);
-        }
-        const data = await response.json();
-        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
-        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
-        botResponseText = rawText;
-        messageElement.innerHTML = formattedResponse;
-    } catch (error) {
-        console.error("API Error:", error);
-        botResponseText = `Oops! Something went wrong: ${error.message}. Please check your API key and try again.`;
-        formattedResponse = botResponseText;
-        messageElement.innerText = botResponseText;
-        messageElement.style.color = "#ff0000";
-    } finally {
-        const currentChat = chatHistory.find(chat => chat.id === currentChatId);
-        if (currentChat) {
-            currentChat.messages.push({
-                sender: "bot",
-                type: "text",
-                content: botResponseText,
-                formattedContent: formattedResponse
-            });
-            currentChat.lastActive = Date.now();
-            saveChatHistory();
-            renderChatHistory();
-        }
-        
-        userData.file = { data: null, mime_type: null, uri: null, rawFile: null };
-
-        incomingMessageDiv.classList.remove("thinking");
-        chatBody.scrollTo({
-            top: chatBody.scrollHeight,
-            behavior: "smooth"
-        });
-    }
-};
-
-
-
-// test custom generate code
-
 // const generateBotResponse = async (incomingMessageDiv) => {
 //     const messageElement = incomingMessageDiv.querySelector(".message-text");
 //     const parts = [];
@@ -769,25 +624,11 @@ const generateBotResponse = async (incomingMessageDiv) => {
 //             }
 //         });
 //     }
-    
-//     // Add Radoms Digital information as context
-//     const systemInstruction = {
-//         parts: [{
-//             text: `You are a customer support chatbot for Radoms Digital. Below is information about the company. Use this information to answer any questions about Radoms Digital:
-
-// ${radomsInfo}
-
-// For any questions about Radoms Digital, respond based on the information above. For other questions, respond normally.`
-//         }]
-//     };
-    
 //     const requestBody = {
 //         contents: [{
 //             parts
-//         }],
-//         systemInstruction: systemInstruction
+//         }]
 //     };
-    
 //     const requestOptions = {
 //         method: "POST",
 //         headers: {
@@ -795,7 +636,6 @@ const generateBotResponse = async (incomingMessageDiv) => {
 //         },
 //         body: JSON.stringify(requestBody)
 //     };
-    
 //     let botResponseText = "";
 //     let formattedResponse = "";
 //     try {
@@ -838,6 +678,101 @@ const generateBotResponse = async (incomingMessageDiv) => {
 //         });
 //     }
 // };
+
+
+
+// test custom generate code
+
+const generateBotResponse = async (incomingMessageDiv) => {
+    const messageElement = incomingMessageDiv.querySelector(".message-text");
+    const parts = [];
+    if (userData.message) parts.push({
+        text: userData.message
+    });
+    if (userData.file.uri) {
+        parts.push({
+            file_data: {
+                mime_type: userData.file.mime_type,
+                file_uri: userData.file.uri
+            }
+        });
+    } else if (userData.file.data) {
+        parts.push({
+            inline_data: {
+                mime_type: userData.file.mime_type,
+                data: userData.file.data
+            }
+        });
+    }
+    
+    // Add Radoms Digital information as context
+    const systemInstruction = {
+        parts: [{
+            text: `You are a customer support chatbot for Radoms Digital. Below is information about the company. Use this information to answer any questions about Radoms Digital:
+
+${radomsInfo}
+
+For any questions about Radoms Digital, respond based on the information above. For other questions, respond normally.`
+        }]
+    };
+    
+    const requestBody = {
+        contents: [{
+            parts
+        }],
+        systemInstruction: systemInstruction
+    };
+    
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+    };
+    
+    let botResponseText = "";
+    let formattedResponse = "";
+    try {
+        const response = await fetch(GEMINI_API_URL, requestOptions);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error.message || `API Error: ${response.status}`);
+        }
+        const data = await response.json();
+        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
+        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
+        botResponseText = rawText;
+        messageElement.innerHTML = formattedResponse;
+    } catch (error) {
+        console.error("API Error:", error);
+        botResponseText = `Oops! Something went wrong: ${error.message}. Please check your API key and try again.`;
+        formattedResponse = botResponseText;
+        messageElement.innerText = botResponseText;
+        messageElement.style.color = "#ff0000";
+    } finally {
+        const currentChat = chatHistory.find(chat => chat.id === currentChatId);
+        if (currentChat) {
+            currentChat.messages.push({
+                sender: "bot",
+                type: "text",
+                content: botResponseText,
+                formattedContent: formattedResponse
+            });
+            currentChat.lastActive = Date.now();
+            saveChatHistory();
+            renderChatHistory();
+        }
+        
+        userData.file = { data: null, mime_type: null, uri: null, rawFile: null };
+
+        incomingMessageDiv.classList.remove("thinking");
+        chatBody.scrollTo({
+            top: chatBody.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+};
 
 // ---- custom generatebot code --------
 
