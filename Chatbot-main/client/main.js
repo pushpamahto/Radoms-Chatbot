@@ -2,10 +2,11 @@
 const radomsInfo = `
 General Business Information:
 Company Name: Radoms Digital
-Website: radomsdigital.com/
+Website: radomsdigital.com
 Industry: Digital Solutions & IT Services
 Founded: 2022
 Happy Customers: 50+ satisfied clients globally
+Google Rating: 5.0/5 ⭐
 
 About Us:
 Radoms Digital is a premier IT company specializing in website development, mobile app creation, UI/UX design, and digital marketing. We are dedicated to transforming innovative ideas into powerful, scalable, and impactful digital experiences that drive growth.
@@ -20,13 +21,21 @@ Sunday: Closed
 Contact Information:
 Email: info@radomsdigital.com
 WhatsApp Number: +91 94157 70571
-Phone: +91 120-5150892
-Address: O 1234, Floor 12, Gaur City Centre,
-Gaur Chowk, West, Sector 4,
-Greater Noida, UP – 203207
+Phone: 120-5150892
+Address: 12th Floor, O-1234, Greater Noida W Rd, Gaur City 1, center, Greater Noida, Ghaziabad, Uttar Pradesh 201318
 
 Social Media Links:
 LinkedIn:linkedin.com/company/radomsdigital/
+
+Core Services:
+IOS App Development
+Android App Development
+Software Development
+Ideation & Design
+Mobile App Dev
+Research & Innovation
+Digital Transformation
+AI Agent
 
 FAQs:
 General:
@@ -51,7 +60,6 @@ We maintain clear communication throughout the development process, so if you ne
 
 How can i contact regarding project?
 You can reach us via phone at +91 94157 70571 or email us at info@radomsdigital.com. Feel free to get in touch with us regarding your project!
-
 
 `;
 
