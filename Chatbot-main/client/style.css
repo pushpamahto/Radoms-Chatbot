@@ -1127,18 +1127,15 @@ body.show-chat-history .chat-history-sidebar {
     color: red;
 
 }
-
 .action-buttons .remove-btn .material-symbols-rounded {
     font-size: 18px;
     display: block;
 }
 
-
 .pdf-upload-container.completed .action-buttons {
     display: none;
 }
   
-
 /*  media queries */
 @media (max-width: 498px) {
     .delete-confirmation-alert {

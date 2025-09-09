@@ -2,20 +2,15 @@
 const radomsInfo = `
 General Business Information:
 Company Name: Radoms Digital
-Website: https://www.radomsdigital.com/
+Website: radomsdigital.com/
 Industry: Digital Solutions & IT Services
+Founded: 2022
 Happy Customers: 50+ satisfied clients globally
 
 About Us:
 Radoms Digital is a premier IT company specializing in website development, mobile app creation, UI/UX design, and digital marketing. We are dedicated to transforming innovative ideas into powerful, scalable, and impactful digital experiences that drive growth.
 
-Core Services:
-1. Website Development: Custom websites, web applications, and portals using MERN & MEAN stacks (React, Angular, Node.js, Express.js).
-2. Mobile App Development: Native and cross-platform apps for iOS & Android using Flutter and React Native.
-3. UI/UX Design: User-centric interface design, wireframing, prototyping, and design systems.
-4. Digital Marketing: Comprehensive strategies including SEO, SEM/PPC, Social Media Marketing, and Content Marketing.
-5. E-commerce Solutions: Custom online stores, marketplace integrations, and payment gateway setups.
-6. Cloud & DevOps: Cloud migration, AWS/Azure services, and CI/CD pipeline setup.
+Tagline: "Transforming Ideas into Digital Reality"
 
 Working Hours:
 Monday to Saturday: 10:00 AM to 7:00 PM (IST)
@@ -31,9 +26,32 @@ Gaur Chowk, West, Sector 4,
 Greater Noida, UP – 203207
 
 Social Media Links:
-LinkedIn: https://www.linkedin.com/company/radomsdigital/
+LinkedIn:linkedin.com/company/radomsdigital/
 
 FAQs:
+General:
+
+What services does Radoms Digital offer?
+We offer web development, mobile app development, artificial intelligence solutions, digital marketing, and software development services. If you have any specific needs or questions about these services, feel free to ask!
+
+Can I see your portfolio?
+Yes! You can view our extensive work on our website.
+
+What technologies do you use for web development?
+We use technologies like Next.js, React, Tailwind CSS, Node.js, and MongoDB for web development. If you have any more questions about our tech stack, feel free to ask!
+
+Do you provide free consultations?
+Yes, we offer a free 30-minute consultation to discuss your project needs.
+
+How can I track my project progress?
+We follow a customer-centric approach, ensuring clear communication and project management throughout the development process. This allows you to stay updated on your project's progress. If you have any specific concerns or questions, feel free to ask!
+
+What if I need changes during development?
+We maintain clear communication throughout the development process, so if you need changes, we can discuss them and adjust accordingly. Your feedback is important to us!
+
+How can i contact regarding project?
+You can reach us via phone at +91 94157 70571 or email us at info@radomsdigital.com. Feel free to get in touch with us regarding your project!
+
 
 `;
 
@@ -61,7 +79,7 @@ const historyList = document.querySelector(".history-list");
 const deleteAllHistoryButton = document.querySelector("#delete-all-history");
 const voiceAssistButton = document.querySelector("#voice-assist");
 // API key
-const API_KEY = "AIzaSyDZBoAeUlaMF8aTGTGU1ttpiKN7pJjL3n0";
+const API_KEY = "AIzaSyBtivhKJ_ZD7zGiR_xoR1D2jW8-FoGWT7Y";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
 

@@ -29,7 +29,6 @@ app.post('/save-user', async (req, res) => {
        res.status(401).json({message: 'All fields are required'})
     }
 
-
     const newUser = new User({ name, email, phone, countryCode });
     await newUser.save();
     res.status(201).json({ message: 'User saved successfully', user: newUser });
