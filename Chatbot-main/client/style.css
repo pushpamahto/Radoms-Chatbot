@@ -291,6 +291,68 @@ body.show-user-form .user-info-popup {
 
 /* mobile */
 
+
+/* warning message*/
+.question-warning-popup {
+    position: fixed;
+    bottom: 160px;
+    right: 37px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+    max-width: 300px;
+}
+
+.question-warning-popup .warning-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.question-warning-popup .warning-content {
+    flex: 1;
+}
+
+.question-warning-popup .warning-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.question-warning-popup .warning-message {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+/* warning */
+
+
 #user-info-submit {
     padding: 14px;
     border: none;
