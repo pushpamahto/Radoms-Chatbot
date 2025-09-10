@@ -1,10 +1,8 @@
-
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('./models/User');
-
 const app = express();
 
 // Middleware
@@ -28,7 +26,6 @@ app.post('/save-user', async (req, res) => {
     if(!name || !email || !phone || !countryCode){
        res.status(401).json({message: 'All fields are required'})
     }
-
     const newUser = new User({ name, email, phone, countryCode });
     await newUser.save();
     res.status(201).json({ message: 'User saved successfully', user: newUser });

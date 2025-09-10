@@ -22,13 +22,11 @@ const userSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid email address!`
     }
   },
-  
   // User's phone number with country code
   phone: {
     type: String,
     required: [true, 'Phone number is required'],
-    trim: true,
-    
+    trim: true,   
   },
   
   // Country code
@@ -52,14 +50,12 @@ const userSchema = new mongoose.Schema({
   }
 }, {
   timestamps: false,
-  
-});
+  });
 
 // Virtual property to get user's initials
 userSchema.virtual('initials').get(function() {
   return this.name.split(' ').map(n => n[0]).join('').toUpperCase();
 });
-
 
 // Static method to find users by name pattern
 userSchema.statics.findByName = function(name) {
