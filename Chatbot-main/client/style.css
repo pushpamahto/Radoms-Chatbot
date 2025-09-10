@@ -289,9 +289,6 @@ body.show-user-form .user-info-popup {
     
 }
 
-/* mobile */
-
-
 /* warning message*/
 .question-warning-popup {
     position: fixed;
@@ -350,13 +347,11 @@ body.show-user-form .user-info-popup {
         visibility: hidden;
     }
 }
-/* warning */
 
 /* limit exceed message  */
 #limit-exceed{
     color: #d93025;
 }
-
 
 #user-info-submit {
     padding: 14px;
