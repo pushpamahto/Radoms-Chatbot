@@ -111,7 +111,7 @@ let isListening = false;
 let activePdfUploads = {};
 
 // adding user question limit only can ask 10 question
-const MAX_QUESTIONS_PER_DAY = 2;
+const MAX_QUESTIONS_PER_DAY = 10;
 let userQuestionCount = 0;
 let lastQuestionDate = null;
 
@@ -174,7 +174,6 @@ const showQuestionWarning = () => {
         }
     }, 3000);
 };
-
 
 // Email validation function
 const isValidEmail = (email) => {
@@ -544,8 +543,6 @@ const startPdfUploadProcess = async (file, messageId, userQuery) => {
                     data: null,
                     rawFile: null
                 };
-                
-                // Final auto-scroll after completion
                 setTimeout(() => {
                     chatBody.scrollTo({
                         top: chatBody.scrollHeight,
@@ -576,8 +573,6 @@ const startPdfUploadProcess = async (file, messageId, userQuery) => {
         if (ui.statusText) {
             ui.statusText.textContent = "Error!";
             ui.statusText.style.color = "#d93025";
-            
-            // Scroll to show error message
             chatBody.scrollTo({
                 top: chatBody.scrollHeight,
                 behavior: "smooth"
@@ -785,8 +780,6 @@ For any questions about Radoms Digital, respond based on the information above. 
     }
 };
 // ---- custom generatebot code --------
-
-
 const handleBotResponse = () => {
     setTimeout(() => {
         const thinkingMessageContent = `<svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024">
@@ -816,11 +809,7 @@ const handleOutgoingMessage = (e) => {
         showLimitExceededMessage();
         return;
     }
-
-    // Increment question count
     userQuestionCount++;
-
-    // Add this right after: userQuestionCount++;
 // Show warning when only 1 question remains
 if (userQuestionCount === MAX_QUESTIONS_PER_DAY - 1) {
     showQuestionWarning();
@@ -898,14 +887,6 @@ if (userQuestionCount === MAX_QUESTIONS_PER_DAY - 1) {
         behavior: "smooth"
     });
 };
-
-
-
-
-
-
-
-
 
 chatbotToggler.addEventListener("click", () => {
     const isAnythingOpen = document.body.classList.contains("show-user-form") || document.body.classList.contains("show-chatbot");
@@ -1118,9 +1099,7 @@ voiceAssistButton.addEventListener("click", () => {
 });
 
 // Country data - all countries with flags and dial codes
-
 const countries = 
-
 [
     { code: "us", name: "United States", dialCode: "+1", flag: "https://flagcdn.com/w40/us.png" },
     { code: "gb", name: "United Kingdom", dialCode: "+44", flag: "https://flagcdn.com/w40/gb.png" },
@@ -1421,10 +1400,10 @@ function initCountrySelector() {
         countrySelector.classList.toggle('open');
         if (countrySelector.classList.contains('open')) {
 
-            countrySearch.value = ''; //clear search input
-            populateCountryList(''); //Reset to show all countries
+            countrySearch.value = ''; 
+            populateCountryList(''); 
             countrySearch.focus();
-            clearSearch.style.display = countrySearch.value ? 'block' : 'none'; // to clear X button 
+            clearSearch.style.display = countrySearch.value ? 'block' : 'none'; 
         }
     });
     
@@ -1436,7 +1415,7 @@ function initCountrySelector() {
     // Show/hide clear button based on input
 countrySearch.addEventListener('input', function(e) {
   clearSearch.style.display = this.value ? 'block' : 'none';
-  populateCountryList(e.target.value); // Keep existing functionality
+  populateCountryList(e.target.value); 
 });
 
 // Clear search when X is clicked
@@ -1444,7 +1423,7 @@ clearSearch.addEventListener('click', function() {
   countrySearch.value = '';
   countrySearch.focus();
   clearSearch.style.display = 'none';
-  populateCountryList(''); // Reset to show all countries
+  populateCountryList('');
 });
 
 // Also add this to handle cases where user clears with backspace
@@ -1459,13 +1438,11 @@ countrySearch.addEventListener('keyup', function() {
         }
     });
     
-    // Initialize with United States
     const usCountry = countries.find(country => country.code === 'us');
     if (usCountry) {
         selectCountry(usCountry);
     }
     
-    // Populate the list initially
     populateCountryList();
 }
 
