@@ -94,6 +94,7 @@ body.show-user-form .user-info-popup {
     display: flex;
     flex-direction: column;
     gap: 18px;
+    
 }
 
 .form-field {
@@ -135,13 +136,12 @@ body.show-user-form .user-info-popup {
 }
 
 /* --- Phone Input Field Styling (Corrected) --- */
-
 .phone-input-container {
-    position: relative; /* CRITICAL: This is the new positioning anchor */
+    position: relative; 
     display: flex;
     border: 1px solid #CCCCE5;
     border-radius: 8px;
-    overflow: visible; /* CRITICAL: Allows dropdown to show outside the container */
+    overflow: visible;
 }
 
 .country-selector {
@@ -179,11 +179,11 @@ body.show-user-form .user-info-popup {
 }
 
 .country-dropdown {
-    display: none; /* Hidden by default */
+    display: none; 
     position: absolute;
-    top: calc(100% + 5px); /* CRITICAL: Positioned below the container with a 5px gap */
+    top: calc(100% + 5px); 
     left: 0;
-    width: 70%; /* CRITICAL: Matches the width of the parent container */
+    width: 70%; 
     max-height: 150px;
     overflow-y: auto;
     background: white;
@@ -191,15 +191,16 @@ body.show-user-form .user-info-popup {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(205, 194, 133) transparent;
     
 }
-
 .country-selector.open .country-dropdown {
-    display: block; /* Show dropdown when selector has 'open' class */
+    display: block; 
 }
 
 .search-container {
-    position: relative; /* needed for absolute position of clear button */
+    position: relative; 
     padding: 10px;
     border-bottom: 1px solid #eee;
     position: sticky;
@@ -425,7 +426,7 @@ body.show-chatbot .chatbot-popup {
 
 /* This targets the close button in BOTH the user form and chatbot header */
 .chat-header #close-chatbot,
-.user-info-popup .chat-header #close-chatbot { /* Added for consistency if you add a close button */
+.user-info-popup .chat-header #close-chatbot { 
     border: none;
     color: #fff;
     height: 40px;
@@ -709,7 +710,7 @@ body.show-chatbot .chatbot-popup {
 em-emoji-picker {
     position: absolute;
     left: 50%;
-    bottom: 60px; /* Adjusted position */
+    bottom: 60px; 
     width: 100%;
     max-width: 350px;
     max-height: 330px;
@@ -860,7 +861,7 @@ body.show-chat-history .chat-history-sidebar {
     display: flex;
     align-items: center;
     gap: 10px;
-    min-width: 0; /* Crucial for text truncation */
+    min-width: 0; 
 }
 
 .chat-history-sidebar .history-list li:hover {
@@ -888,14 +889,14 @@ body.show-chat-history .chat-history-sidebar {
     font-size: 0.9rem;
     color: #333;
     flex: 1;
-    min-width: 0; /* Allows text to truncate */
+    min-width: 0;
 }
 
 .chat-history-sidebar .history-list .chat-time {
     font-size: 0.75rem;
     color: #6c757d;
     flex-shrink: 0;
-    margin-left: auto; /* Pushes time to the right */
+    margin-left: auto; 
     padding-left: 10px;
 }
 
@@ -950,10 +951,10 @@ body.show-chat-history .chat-history-sidebar {
 /* Delete Confirmation Alert Styles */
 .delete-confirmation-alert {
     position: absolute;
-    bottom: 70px; /* Position above the delete button */
+    bottom: 70px; 
     left: 50%;
     transform: translateX(-50%);
-    width: calc(100% - 40px); /* Match sidebar padding */
+    width: calc(100% - 40px); 
     background: #f2efcb;
     border-radius: 12px;
     padding: 15px;
@@ -962,7 +963,7 @@ body.show-chat-history .chat-history-sidebar {
     text-align: center;
     border: 1px solid #c8b105;
     animation: fadeIn 0.3s ease;
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .delete-confirmation-alert.show {
@@ -1088,9 +1089,7 @@ body.show-chat-history .chat-history-sidebar {
     color: #000;
 }
   
-
 /* with no preview below */
-
 .message.user-message .pdf-upload-container {
     background-color: #f0f0f0;
     border-radius: 12px;
@@ -1199,12 +1198,6 @@ body.show-chat-history .chat-history-sidebar {
 }
   
 /*  media queries */
-@media (max-width: 498px) {
-    .delete-confirmation-alert {
-        width: calc(100% - 30px);
-        bottom: 70px;
-    }
-}
   @media (max-width:498px) {
     #chatbot-toggler {
         right: 20px;
@@ -1218,7 +1211,7 @@ body.show-chat-history .chat-history-sidebar {
     .user-info-popup { 
         right:15px;
         bottom: 80px;
-        height: 50%;
+        height: 60%;
         border-radius: 15px;
         box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
          transition: all 0.1s ease;
@@ -1255,7 +1248,7 @@ body.show-chat-history .chat-history-sidebar {
     .chat-history-sidebar {
     position: fixed;
     top: 12%;
-    right: -900px; /* Hidden by default */
+    right: -900px; 
     margin-right: 3.5%;
     height: 70%;
     width: 350px;
@@ -1267,7 +1260,16 @@ body.show-chat-history .chat-history-sidebar {
     flex-direction: column;
     border-radius: 20px;
 }
+
+.delete-confirmation-alert {
+        width: calc(100% - 30px);
+        bottom: 70px;
 } 
+ .country-dropdown {
+        max-height: 200px; 
+        
+    }
+  }
 
 /* For screens 499px and larger */
 @media (min-width: 499px) and (max-width: 768px) {
@@ -1311,7 +1313,7 @@ body.show-chat-history .chat-history-sidebar {
 
     /* Chat body adjustments */
     .chat-body {
-        height: calc(80% - 55px); /* 120px accounts for header+footer */
+        height: calc(80% - 55px);
         padding: 20px;
         margin-bottom: 0;
         overflow-y: auto;
@@ -1320,20 +1322,20 @@ body.show-chat-history .chat-history-sidebar {
     /* Proper chat history sidebar positioning */
     .chat-history-sidebar {
         position: fixed;
-        top: 9%; /* Matches chat popup top position */
-        right: -320px; /* Hidden by default */
+        top: 9%; 
+        right: -320px; 
         width: 300px;
-        height: 400px; /* Matches chat popup height */
+        height: 400px; 
         background: #fff;
         border-radius: 15px;
         box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
         transition: right 0.3s ease;
-        /* z-index: 997;  */
+       
     }
 
     /* When history is shown */
     body.show-chat-history .chat-history-sidebar {
-        right: 2px; /* Positions to the left of chat popup */
+        right: 2px; 
     }
 
     /* Header adjustments */
@@ -1358,6 +1360,9 @@ body.show-chat-history .chat-history-sidebar {
     .message-input {
         font-size: 0.95rem;
         padding: 12px 15px;
+    }
+    .country-dropdown {
+        height: 220px; 
     }
 }
 

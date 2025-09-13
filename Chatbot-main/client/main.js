@@ -86,9 +86,7 @@ const historyList = document.querySelector(".history-list");
 const deleteAllHistoryButton = document.querySelector("#delete-all-history");
 const voiceAssistButton = document.querySelector("#voice-assist");
 // API key
- const API_KEY ="AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos";
-// const API_KEY = "AIzaSyBtivhKJ_ZD7zGiR_xoR1D2jW8-FoGWT7Y";
-
+const API_KEY ="AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
 
