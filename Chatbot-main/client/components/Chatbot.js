@@ -9,7 +9,7 @@ import { saveChatHistory, loadChatHistory } from '../utils/historyManager.js';
 import { formatMessageTime } from '../utils/formatters.js';
 import { createPdfUploadElement, renderPdfMessageFromHistory } from '../utils/fileProcessor.js';
 
-export class Chatbot {
+export default class Chatbot {
     constructor() {
         this.chatBody = document.querySelector(".chat-body");
         this.messageInput = document.querySelector(".message-input");

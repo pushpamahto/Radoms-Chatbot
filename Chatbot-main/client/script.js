@@ -1,4 +1,3 @@
-
 const RADOMS_INFO = `
 General Business Information:
 Company Name: Radoms Digital
