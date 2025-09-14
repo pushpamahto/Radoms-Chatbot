@@ -1,5 +1,5 @@
 import { isValidEmail, isValidPhone } from '../utils/validations.js';
-import { BASE_URL } from '../config/constants.js';
+import { baseUrl } from '../config/constants.js';
 
 export class UserInfoForm {
     constructor() {
@@ -63,7 +63,7 @@ export class UserInfoForm {
         // Validate email
         if (!isValidEmail(email)) {
             this.userEmailInput.classList.add("error");
-            this.emailError.style.display = ("block");
+            this.emailError.style.display = "block";
             this.userEmailInput.focus();
             return;
         }
@@ -113,7 +113,7 @@ export class UserInfoForm {
 
     async saveUserData(userInfo) {
         try {
-            const response = await fetch(`${BASE_URL}/save-user`, {
+            const response = await fetch(`${baseUrl}/save-user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
