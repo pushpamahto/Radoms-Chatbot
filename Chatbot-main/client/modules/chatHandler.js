@@ -6,7 +6,8 @@ import {
     chatBody,
     messageInput,
     pdfPreviewContainer,
-    fileUploadWrapper
+    fileUploadWrapper,
+    voiceAssistButton // Added this import
 } from './domElements.js';
 import {
     createMessageElement,
@@ -131,9 +132,9 @@ export const loadChat = (chatId) => {
                 messageDiv = renderPdfMessageFromHistory(msg);
             } else {
                 const content = `
-                    ${msg.content ? `<div class="message-text">${msg.content}</div>` : ''}
-                    ${msg.type === "image" && msg.fileData ? `<img src="data:${msg.mimeType};base64,${msg.fileData}" class="attachment" />` : ""}
-                    <div class="user-message-time">${formatMessageTime(msg.timestamp)}</div>`;
+                        ${msg.content ? `<div class="message-text">${msg.content}</div>` : ''}
+                        ${msg.type === "image" && msg.fileData ? `<img src="data:${msg.mimeType};base64,${msg.fileData}" class="attachment" />` : ""}
+                        <div class="user-message-time">${formatMessageTime(msg.timestamp)}</div>`;
                 messageDiv = createMessageElement(content, "user-message");
             }
         }
@@ -226,7 +227,7 @@ export const handleOutgoingMessage = (e) => {
 
         const pdfUploadCallbacks = {
             onSuccess: (fileUri, userQuery, file) => {
-                 const msgToUpdate = currentChat?.messages.find(msg => msg.id === messageId);
+                const msgToUpdate = currentChat?.messages.find(msg => msg.id === messageId);
                 if (msgToUpdate) {
                     msgToUpdate.fileUri = fileUri;
                     saveChatHistory(state);
@@ -286,43 +287,100 @@ export const handleOutgoingMessage = (e) => {
     });
 };
 
-export const setupVoiceRecognition = (callbacks) => {
+
+// ========================================================
+// START: CORRECTED VOICE RECOGNITION CODE
+// ========================================================
+
+/**
+ * Sets up the Web Speech API for voice recognition.
+ * This function should be called once when the application initializes.
+ */
+export const setupVoiceRecognition = () => {
+    // Check if the browser supports the Web Speech API
     if (!('webkitSpeechRecognition' in window)) {
-        voiceAssistButton.style.display = "none";
+        voiceAssistButton.style.display = "none"; // Hide button if not supported
         return;
     }
+
+    // Initialize the recognition object from the state
     state.recognition = new webkitSpeechRecognition();
-    state.recognition.continuous = false;
-    state.recognition.interimResults = true;
+    state.recognition.continuous = false; // Stop listening after the user stops speaking
+    state.recognition.interimResults = true; // Get results as the user speaks
     state.recognition.lang = 'en-US';
+
+    // Event handler for when recognition starts
     state.recognition.onstart = () => {
         state.isListening = true;
+        // Add 'listening' class to the button for the blinking red effect
         voiceAssistButton.classList.add("listening");
     };
+
+    // Event handler for when a speech result is received
     state.recognition.onresult = (event) => {
         let interimTranscript = '',
             finalTranscript = '';
+
+        // Loop through the results to build the final transcript
         for (let i = event.resultIndex; i < event.results.length; ++i) {
             const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) finalTranscript += transcript;
-            else interimTranscript += transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+            } else {
+                interimTranscript += transcript;
+            }
         }
+        
+        // Update the message input with the transcribed text
         messageInput.value = finalTranscript || interimTranscript;
-        messageInput.dispatchEvent(new Event("input"));
+        messageInput.dispatchEvent(new Event("input")); // Trigger input event to resize textarea
     };
+
+    // Event handler for speech recognition errors
     state.recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         state.isListening = false;
         voiceAssistButton.classList.remove("listening");
     };
+
+    // Event handler for when recognition ends
     state.recognition.onend = () => {
         state.isListening = false;
+        // Remove 'listening' class to stop the blinking effect
         voiceAssistButton.classList.remove("listening");
+
+        // Automatically send the message if there is transcribed text or a file
         if (messageInput.value.trim() !== "" || state.pendingPdfFile || state.userData.file.data) {
-            callbacks.handleOutgoingMessage(new Event("submit"));
+            handleOutgoingMessage(new Event("submit"));
         }
     };
 };
+
+/**
+ * Toggles the voice recognition on and off.
+ * This function should be called by the click event listener of the voice button.
+ */
+export const toggleVoiceRecognition = () => {
+    if (state.isListening) {
+        // If already listening, stop it
+        state.recognition.stop();
+    } else {
+        // If not listening, clear the input and start recognition
+        messageInput.value = "";
+        messageInput.focus();
+        try {
+            state.recognition.start();
+        } catch (error) {
+            console.error("Error starting speech recognition:", error);
+            alert("Could not start voice assistant. Please check microphone permissions.");
+        }
+    }
+};
+
+// ========================================================
+// END: CORRECTED VOICE RECOGNITION CODE
+// ========================================================
+
 
 export const clearCurrentChat = () => {
     const chatToClearId = state.currentChatId;
@@ -344,3 +402,16 @@ const callbacks = {
     loadChat,
     startNewChat
 };
+
+
+
+
+
+
+
+
+
+
+
+
+

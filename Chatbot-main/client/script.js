@@ -24,6 +24,9 @@ import {
     initialInputHeight
 } from './modules/uiManager.js';
 import * as DOMElements from './modules/domElements.js';
+import {
+    saveUserData
+} from './modules/api.js';
 
 // ---- INITIAL SETUP ----
 
@@ -64,6 +67,8 @@ DOMElements.userInfoForm.addEventListener("submit", (e) => {
     const name = DOMElements.userNameInput.value.trim();
     const email = DOMElements.userEmailInput.value.trim();
     const phone = DOMElements.userPhoneInput.value.trim();
+    const countryDialCode = document.querySelector('#country-selector .country-code').textContent;
+
 
     if (!isValidEmail(email)) {
         DOMElements.userEmailInput.classList.add("error");
@@ -84,10 +89,11 @@ DOMElements.userInfoForm.addEventListener("submit", (e) => {
     state.userInfo = {
         name,
         email,
-        phone
+        phone: countryDialCode + phone,
+        countryCode: countryDialCode
     };
-    // In a real app, you would save user data to a backend here.
-    // saveUserData(state.userInfo); 
+
+    saveUserData(state.userInfo);
 
     loadChatHistory(state);
     document.body.classList.remove("show-user-form");
@@ -95,6 +101,11 @@ DOMElements.userInfoForm.addEventListener("submit", (e) => {
     DOMElements.userNameInput.value = "";
     DOMElements.userEmailInput.value = "";
     DOMElements.userPhoneInput.value = "";
+    DOMElements.userEmailInput.classList.remove("error");
+    DOMElements.emailError.style.display = "none";
+    DOMElements.userPhoneInput.classList.remove("error");
+    DOMElements.phoneError.style.display = "none";
+
 
     if (state.chatHistory.length > 0) {
         renderChatHistory(state, {
@@ -273,3 +284,47 @@ DOMElements.voiceAssistButton.addEventListener("click", () => {
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

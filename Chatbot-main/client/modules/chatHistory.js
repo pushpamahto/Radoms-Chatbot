@@ -5,6 +5,10 @@ import {
 import {
     formatChatTimestamp
 } from './utils.js';
+import {
+    CHAT_HISTORY_RETENTION_DAYS
+} from './config.js';
+
 
 export const saveChatHistory = (state) => {
     if (!state.userInfo || !state.userInfo.email) return;
@@ -23,10 +27,13 @@ export const loadChatHistory = (state) => {
     const userHistoryKey = `chatHistory_${state.userInfo.email}`;
     const savedHistory = localStorage.getItem(userHistoryKey);
     let allUserHistory = savedHistory ? JSON.parse(savedHistory) : [];
-    const oneWeekAgo = new Date();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-    const oneWeekAgoTimestamp = oneWeekAgo.getTime();
-    state.chatHistory = allUserHistory.filter(chat => chat.lastActive && chat.lastActive >= oneWeekAgoTimestamp);
+    
+    const retentionDate = new Date();
+    retentionDate.setDate(retentionDate.getDate() - CHAT_HISTORY_RETENTION_DAYS);
+    const retentionTimestamp = retentionDate.getTime();
+
+    state.chatHistory = allUserHistory.filter(chat => chat.lastActive && chat.lastActive >= retentionTimestamp);
+
     if (state.chatHistory.length < allUserHistory.length) {
         saveChatHistory(state);
     }

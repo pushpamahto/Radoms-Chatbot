@@ -2,14 +2,15 @@ import {
     GEMINI_API_URL,
     FILE_API_BASE_URL,
     API_KEY,
-    radomsInfo
+    radomsInfo,
+    SAVE_USER_URL
 } from './config.js';
 import {
     chatBody
 } from './domElements.js';
 
 export const saveUserData = (userInfo) => {
-    fetch(`${baseUrl}/save-user`, {
+    fetch(SAVE_USER_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +83,7 @@ For any questions about Radoms Digital, respond based on the information above. 
             throw new Error(errorData.error.message || `API Error: ${response.status}`);
         }
         const data = await response.json();
-       let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
+        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
         formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
         botResponseText = rawText;
         messageElement.innerHTML = formattedResponse;

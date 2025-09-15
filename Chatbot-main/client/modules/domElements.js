@@ -27,3 +27,20 @@ export const newChatButton = document.querySelector("#new-chat");
 export const fileUploadButton = document.querySelector("#file-upload");
 export const emojiPickerButton = document.querySelector("#emoji-picker");
 export const chatForm = document.querySelector(".chat-form");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
