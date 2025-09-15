@@ -1,3 +1,16 @@
+// Email validation function
+export const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+// Phone validation function
+export const isValidPhone = (phone) => {
+    const phoneRegex = /^[+]?[0-9]{8,15}$/;
+    return phoneRegex.test(phone);
+};
+
+// Format file size for display
 export const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -6,6 +19,7 @@ export const formatFileSize = (bytes) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 };
 
+// Format timestamp for chat history list
 export const formatChatTimestamp = (timestamp) => {
     if (!timestamp) return "";
     const date = new Date(timestamp);
@@ -15,7 +29,6 @@ export const formatChatTimestamp = (timestamp) => {
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
     const targetDateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
     if (targetDateOnly.getTime() === today.getTime()) {
         return date.toLocaleTimeString('en-US', {
             hour: 'numeric',
@@ -32,6 +45,7 @@ export const formatChatTimestamp = (timestamp) => {
     }
 };
 
+// Format timestamp for individual messages
 export const formatMessageTime = (timestamp) => {
     if (!timestamp) return "";
     const date = new Date(timestamp);

@@ -1,10 +1,14 @@
+export const baseUrl = "http://localhost:3007";
+
+// API key
 export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos";
 export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
 export const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
-export const baseUrl = "http://localhost:3007";
 
-export const MAX_QUESTIONS_PER_DAY = 10;
+// Chat settings
+export const MAX_QUESTIONS_PER_DAY = 2;
 
+// custom info code for
 export const radomsInfo = `
 General Business Information:
 Company Name: Radoms Digital
@@ -65,4 +69,6 @@ We maintain clear communication throughout the development process, so if you ne
 
 How can i contact regarding project?
 You can reach us via phone at +91 94157 70571 or email us at info@radomsdigital.com. Feel free to get in touch with us regarding your project!
+
 `;
+

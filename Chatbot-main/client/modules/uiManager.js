@@ -1,5 +1,111 @@
-const countries = 
-[
+import {
+    chatBody,
+    messageInput,
+    pdfPreviewContainer,
+    fileUploadWrapper
+} from './domElements.js';
+import {
+    formatFileSize,
+    formatMessageTime
+} from './utils.js';
+import {
+    MAX_QUESTIONS_PER_DAY
+} from './config.js';
+
+export const initialInputHeight = messageInput.scrollHeight;
+
+export const createMessageElement = (content, ...classes) => {
+    const div = document.createElement("div");
+    div.classList.add("message", ...classes);
+    div.innerHTML = content;
+    return div;
+};
+
+export const showLimitExceededMessage = () => {
+    const messageContent = `<svg class="bot-avatar" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 1024 1024"><path d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z" fill="#fff"></path></svg>
+    <div class="message-text" id="limit-exceed">
+        You've reached your daily limit of ${MAX_QUESTIONS_PER_DAY} questions. 
+        Please come back tomorrow to ask more questions.
+    </div>`;
+    const limitMessageDiv = createMessageElement(messageContent, "bot-message");
+    chatBody.appendChild(limitMessageDiv);
+    chatBody.scrollTo({
+        top: chatBody.scrollHeight,
+        behavior: "smooth"
+    });
+};
+
+export const showQuestionWarning = () => {
+    const existingWarning = document.querySelector('.question-warning-popup');
+    if (existingWarning) {
+        existingWarning.remove();
+    }
+    const warningPopup = document.createElement('div');
+    warningPopup.className = 'question-warning-popup';
+    warningPopup.innerHTML = `
+        <span class="material-symbols-rounded warning-icon">warning</span>
+        <div class="warning-content">
+            <div class="warning-title">Only 1 Question Left!</div>
+            <div class="warning-message">You can ask only 1 more question today.</div>
+        </div>`;
+    document.body.appendChild(warningPopup);
+    setTimeout(() => {
+        if (warningPopup.parentNode) {
+            warningPopup.parentNode.removeChild(warningPopup);
+        }
+    }, 3000);
+};
+
+export const createPdfUploadElement = (messageId, fileName, fileSize, isCompleted = false, fileUri = null) => {
+    const formattedSize = formatFileSize(fileSize);
+    const statusContent = isCompleted ?
+        `<span class="upload-status"><span class="material-symbols-rounded completed-check">check_circle</span> Completed</span>` :
+        `<span class="file-size">${formattedSize}</span><span class="upload-status">Uploading...</span>`;
+
+    const fileNameContent = isCompleted ?
+        `<a href="${fileUri}" target="_blank" style="text-decoration: none; color: #fff;"><div class="file-name">${fileName}</div></a>` :
+        `<div class="file-name">${fileName}</div>`;
+
+    return `
+        <div class="pdf-upload-container ${isCompleted ? 'completed' : ''}" id="pdf-${messageId}">
+            <span class="material-symbols-rounded pdf-icon">picture_as_pdf</span>
+            <div class="file-info">
+                ${fileNameContent}
+                <div class="progress-details">${statusContent}</div>
+                ${!isCompleted ? '<div class="progress-bar"><div class="progress"></div></div>' : ''}
+            </div>
+        </div>`;
+};
+
+export const renderPdfMessageFromHistory = (msg) => {
+    const content = `
+        ${msg.content ? `<div class="message-text">${msg.content}</div>` : ''}
+        ${createPdfUploadElement(msg.id, msg.fileName, msg.fileSize, true, msg.fileUri)}
+        <div class="user-message-time">${formatMessageTime(msg.timestamp)}</div>`;
+    return createMessageElement(content, "user-message");
+};
+
+
+export const injectHistoryStyles = () => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .chat-history-item-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .chat-time { font-size: 0.75rem; color: #6c757d; flex-shrink: 0; margin-left: 10px; }
+        .user-message-time { font-size: 0.7rem; color: #888; text-align: right; margin-top: 5px; padding-right: 10px; }
+    `;
+    document.head.appendChild(style);
+};
+
+export const clearPdfPreview = (state) => {
+    state.pendingPdfFile = null;
+    pdfPreviewContainer.innerHTML = '';
+    pdfPreviewContainer.style.display = 'none';
+    fileInput.value = '';
+};
+
+
+// Country data - all countries with flags and dial codes
+const countries = [
     { code: "us", name: "United States", dialCode: "+1", flag: "https://flagcdn.com/w40/us.png" },
     { code: "gb", name: "United Kingdom", dialCode: "+44", flag: "https://flagcdn.com/w40/gb.png" },
     { code: "ca", name: "Canada", dialCode: "+1", flag: "https://flagcdn.com/w40/ca.png" },
@@ -241,34 +347,23 @@ const countries =
 // Sort countries alphabetically by name
 countries.sort((a, b) => a.name.localeCompare(b.name));
 
-export class CountrySelector {
-    constructor() {
-        this.countrySelector = document.getElementById('country-selector');
-        this.selectedCountry = this.countrySelector.querySelector('.selected-country');
-        this.countryDropdown = this.countrySelector.querySelector('.country-dropdown');
-        this.countryList = this.countrySelector.querySelector('.country-list');
-        this.countrySearch = this.countrySelector.querySelector('.country-search');
-        this.clearSearch = document.getElementById('clear-search');
-    }
+// Initialize country selector
+export function initCountrySelector() {
+    const countrySelector = document.getElementById('country-selector');
+    const selectedCountry = countrySelector.querySelector('.selected-country');
+    const countryDropdown = countrySelector.querySelector('.country-dropdown');
+    const countryList = countrySelector.querySelector('.country-list');
+    const countrySearch = countrySelector.querySelector('.country-search');
+    const phoneInput = document.getElementById('user-phone');
+    const clearSearch = document.getElementById('clear-search');
 
-    init() {
-        this.populateCountryList();
-        this.setupEventListeners();
-        
-        // Set default country to US
-        const usCountry = countries.find(country => country.code === 'us');
-        if (usCountry) {
-            this.selectCountry(usCountry);
-        }
-    }
-
-    populateCountryList(filter = '') {
-        this.countryList.innerHTML = '';
-        const filteredCountries = countries.filter(country => 
-            country.name.toLowerCase().includes(filter.toLowerCase()) || 
+    function populateCountryList(filter = '') {
+        countryList.innerHTML = '';
+        const filteredCountries = countries.filter(country =>
+            country.name.toLowerCase().includes(filter.toLowerCase()) ||
             country.dialCode.includes(filter)
         );
-        
+
         filteredCountries.forEach(country => {
             const countryItem = document.createElement('div');
             countryItem.className = 'country-item';
@@ -279,75 +374,64 @@ export class CountrySelector {
                     <span class="country-dial-code">${country.dialCode}</span>
                 </div>
             `;
-            
             countryItem.addEventListener('click', () => {
-                this.selectCountry(country);
-                this.countrySelector.classList.remove('open');
+                selectCountry(country);
+                countrySelector.classList.remove('open');
             });
-            
-            this.countryList.appendChild(countryItem);
+            countryList.appendChild(countryItem);
         });
     }
 
-    selectCountry(country) {
-        const flagImg = this.selectedCountry.querySelector('.country-flag');
-        const codeSpan = this.selectedCountry.querySelector('.country-code');
-        
+    function selectCountry(country) {
+        const flagImg = selectedCountry.querySelector('.country-flag');
+        const codeSpan = selectedCountry.querySelector('.country-code');
         flagImg.src = country.flag;
         flagImg.srcset = `${country.flag.replace('w40', 'w80')} 2x`;
         flagImg.alt = `${country.name} Flag`;
         codeSpan.textContent = country.dialCode;
-        
-        // Store selected country in data attribute
-        this.countrySelector.setAttribute('data-selected-code', country.code);
+        countrySelector.setAttribute('data-selected-code', country.code);
     }
 
-    setupEventListeners() {
-        // Toggle dropdown
-        this.selectedCountry.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.countrySelector.classList.toggle('open');
-            if (this.countrySelector.classList.contains('open')) {
-                this.countrySearch.value = ''; 
-                this.populateCountryList(''); 
-                this.countrySearch.focus();
-                this.clearSearch.style.display = this.countrySearch.value ? 'block' : 'none'; 
-            }
-        });
-        
-        // Search functionality
-        this.countrySearch.addEventListener('input', (e) => {
-            this.populateCountryList(e.target.value);
-        });
+    selectedCountry.addEventListener('click', (e) => {
+        e.stopPropagation();
+        countrySelector.classList.toggle('open');
+        if (countrySelector.classList.contains('open')) {
+            countrySearch.value = '';
+            populateCountryList('');
+            countrySearch.focus();
+            clearSearch.style.display = countrySearch.value ? 'block' : 'none';
+        }
+    });
 
-        // Show/hide clear button based on input
-        this.countrySearch.addEventListener('input', () => {
-            this.clearSearch.style.display = this.countrySearch.value ? 'block' : 'none';
-        });
+    countrySearch.addEventListener('input', (e) => {
+        populateCountryList(e.target.value);
+    });
 
-        // Clear search when X is clicked
-        this.clearSearch.addEventListener('click', () => {
-            this.countrySearch.value = '';
-            this.countrySearch.focus();
-            this.clearSearch.style.display = 'none';
-            this.populateCountryList('');
-        });
-        
-        // Also add this to handle cases where user clears with backspace
-        this.countrySearch.addEventListener('keyup', () => {
-            this.clearSearch.style.display = this.countrySearch.value ? 'block' : 'none';
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!this.countrySelector.contains(e.target)) {
-                this.countrySelector.classList.remove('open');
-            }
-        });
+    countrySearch.addEventListener('input', function(e) {
+        clearSearch.style.display = this.value ? 'block' : 'none';
+        populateCountryList(e.target.value);
+    });
+
+    clearSearch.addEventListener('click', function() {
+        countrySearch.value = '';
+        countrySearch.focus();
+        clearSearch.style.display = 'none';
+        populateCountryList('');
+    });
+
+    countrySearch.addEventListener('keyup', function() {
+        clearSearch.style.display = this.value ? 'block' : 'none';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!countrySelector.contains(e.target)) {
+            countrySelector.classList.remove('open');
+        }
+    });
+
+    const usCountry = countries.find(country => country.code === 'us');
+    if (usCountry) {
+        selectCountry(usCountry);
     }
-
-    getSelectedCountry() {
-        const selectedCountryCode = this.countrySelector.getAttribute('data-selected-code');
-        return countries.find(country => country.code === selectedCountryCode);
-    }
+    populateCountryList();
 }

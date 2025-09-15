@@ -1,28 +1,53 @@
-import { GEMINI_API_URL, FILE_API_BASE_URL, API_KEY, radomsInfo } from '../config/constants.js';
+import {
+    GEMINI_API_URL,
+    FILE_API_BASE_URL,
+    API_KEY,
+    radomsInfo
+} from './config.js';
+import {
+    chatBody
+} from './domElements.js';
 
-export const generateBotResponse = async (userData, incomingMessageDiv, currentChat, saveChatHistory, renderChatHistory) => {
+export const saveUserData = (userInfo) => {
+    fetch(`${baseUrl}/save-user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInfo)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('User data saved:', data);
+        })
+        .catch(error => {
+            console.error('Error saving user data:', error);
+        });
+};
+
+
+export const generateBotResponse = async (incomingMessageDiv, state, callbacks) => {
     const messageElement = incomingMessageDiv.querySelector(".message-text");
     const parts = [];
-    
-    if (userData.message) parts.push({ text: userData.message });
-    
-    if (userData.file.uri) {
+    if (state.userData.message) parts.push({
+        text: state.userData.message
+    });
+    if (state.userData.file.uri) {
         parts.push({
             file_data: {
-                mime_type: userData.file.mime_type,
-                file_uri: userData.file.uri
+                mime_type: state.userData.file.mime_type,
+                file_uri: state.userData.file.uri
             }
         });
-    } else if (userData.file.data) {
+    } else if (state.userData.file.data) {
         parts.push({
             inline_data: {
-                mime_type: userData.file.mime_type,
-                data: userData.file.data
+                mime_type: state.userData.file.mime_type,
+                data: state.userData.file.data
             }
         });
     }
-    
-    // Add Radoms Digital information as context
+
     const systemInstruction = {
         parts: [{
             text: `You are a customer support chatbot for Radoms Digital. Below is information about the company. Use this information to answer any questions about Radoms Digital:
@@ -32,39 +57,33 @@ ${radomsInfo}
 For any questions about Radoms Digital, respond based on the information above. For other questions, respond normally.`
         }]
     };
-    
+
     const requestBody = {
-        contents: [{ parts }],
+        contents: [{
+            parts
+        }],
         systemInstruction: systemInstruction
     };
-    
+
     const requestOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify(requestBody)
     };
-    
+
     let botResponseText = "";
     let formattedResponse = "";
-    
     try {
         const response = await fetch(GEMINI_API_URL, requestOptions);
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error.message || `API Error: ${response.status}`);
         }
-        
         const data = await response.json();
-        let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
-        
-        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>')
-            .replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>')
-            .replace(/- /g, '• ')
-            .replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>')
-            .replace(/\`(.*?)\`/g, '<code>$1</code>');
-        
+       let rawText = data.candidates[0]?.content?.parts[0]?.text || "Sorry, I couldn't process that.";
+        formattedResponse = rawText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>').replace(/#+\s*(.*?)(?:\n|$)/g, '<strong>$1</strong>').replace(/- /g, '• ').replace(/\`\`\`([\s\S]*?)\`\`\`/g, '<pre>$1</pre>').replace(/\`(.*?)\`/g, '<code>$1</code>');
         botResponseText = rawText;
         messageElement.innerHTML = formattedResponse;
     } catch (error) {
@@ -74,32 +93,22 @@ For any questions about Radoms Digital, respond based on the information above. 
         messageElement.innerText = botResponseText;
         messageElement.style.color = "#ff0000";
     } finally {
-        if (currentChat) {
-            currentChat.messages.push({
-                sender: "bot",
-                type: "text",
-                content: botResponseText,
-                formattedContent: formattedResponse
-            });
-            
-            currentChat.lastActive = Date.now();
-            saveChatHistory();
-            renderChatHistory();
-        }
-        
-        userData.file = { data: null, mime_type: null, uri: null, rawFile: null };
+        callbacks.onComplete(botResponseText, formattedResponse);
         incomingMessageDiv.classList.remove("thinking");
+        chatBody.scrollTo({
+            top: chatBody.scrollHeight,
+            behavior: "smooth"
+        });
     }
 };
 
-export const startPdfUploadProcess = async (file, messageId, userQuery, userData, chatBody, currentChat, saveChatHistory) => {
+export const startPdfUploadProcess = async (file, messageId, userQuery, state, callbacks) => {
     const ui = {
         container: document.getElementById(`pdf-${messageId}`),
         progressBar: document.querySelector(`#pdf-${messageId} .progress`),
         statusText: document.querySelector(`#pdf-${messageId} .upload-status`),
     };
 
-    // Auto-scroll to show the PDF upload container
     chatBody.scrollTo({
         top: chatBody.scrollHeight,
         behavior: "smooth"
@@ -121,23 +130,22 @@ export const startPdfUploadProcess = async (file, messageId, userQuery, userData
                 }
             })
         });
-        
+
         if (!startResponse.ok) throw new Error(`API Error: ${startResponse.statusText}`);
         const uploadUrl = startResponse.headers.get('X-Goog-Upload-Url');
         if (!uploadUrl) throw new Error("Could not get upload URL.");
 
         const xhr = new XMLHttpRequest();
+        state.activePdfUploads[messageId] = xhr;
         xhr.open('POST', uploadUrl, true);
         xhr.setRequestHeader('X-Goog-Upload-Command', 'upload, finalize');
         xhr.setRequestHeader('Content-Type', file.type);
-        
+
         xhr.upload.onprogress = (event) => {
             if (event.lengthComputable) {
                 const percentComplete = (event.loaded / event.total) * 100;
                 ui.progressBar.style.width = percentComplete + '%';
                 ui.statusText.textContent = `${Math.round(percentComplete)}% uploaded`;
-                
-                // Auto-scroll during upload progress
                 chatBody.scrollTo({
                     top: chatBody.scrollHeight,
                     behavior: "smooth"
@@ -146,6 +154,7 @@ export const startPdfUploadProcess = async (file, messageId, userQuery, userData
         };
 
         xhr.onload = () => {
+            delete state.activePdfUploads[messageId];
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const fileUri = response.file.uri;
@@ -153,43 +162,22 @@ export const startPdfUploadProcess = async (file, messageId, userQuery, userData
                 ui.container.classList.add('completed');
                 ui.progressBar.parentElement.style.display = 'none';
                 ui.statusText.innerHTML = `<span class="material-symbols-rounded completed-check">check_circle</span> Completed`;
+                callbacks.onSuccess(fileUri, userQuery, file);
 
-                const msgToUpdate = currentChat?.messages.find(msg => msg.id === messageId);
-                if (msgToUpdate) {
-                    msgToUpdate.fileUri = fileUri;
-                    saveChatHistory();
-                }
-
-                userData.message = userQuery || `The user uploaded a file named "${file.name}". Please provide a brief summary of this document.`;
-                userData.file = {
-                    uri: fileUri,
-                    mime_type: file.type,
-                    data: null,
-                    rawFile: null
-                };
-                
-                setTimeout(() => {
-                    chatBody.scrollTo({
-                        top: chatBody.scrollHeight,
-                        behavior: "smooth"
-                    });
-                }, 100);
             } else {
                 throw new Error(`Upload failed: ${xhr.statusText}`);
             }
         };
 
         xhr.onerror = () => {
+            delete state.activePdfUploads[messageId];
             ui.statusText.textContent = "Upload failed.";
             ui.statusText.style.color = "#d93025";
-            
-            // Scroll to show error message
             chatBody.scrollTo({
                 top: chatBody.scrollHeight,
                 behavior: "smooth"
             });
         };
-        
         xhr.send(file);
     } catch (error) {
         console.error("PDF Upload Error:", error);
