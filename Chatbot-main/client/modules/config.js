@@ -1,4 +1,6 @@
-export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos"; // Replace with your actual API key
+export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos"; 
+// export const API_KEY = "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";
+
 export const BASE_URL = "http://localhost:3007";
 
 // API Endpoints

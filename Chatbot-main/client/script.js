@@ -1,3 +1,4 @@
+
 import {
     state,
     handleOutgoingMessage,
@@ -151,7 +152,6 @@ DOMElements.fileInput.addEventListener("change", () => {
     if (!file) return;
 
     clearPdfPreview(state);
-    DOMElements.fileUploadWrapper.classList.remove("file-uploaded");
     state.userData.file = {
         data: null,
         mime_type: null,
@@ -177,7 +177,14 @@ DOMElements.fileInput.addEventListener("change", () => {
     } else if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            DOMElements.fileUploadWrapper.querySelector("img").src = e.target.result;
+            DOMElements.fileUploadWrapper.innerHTML = `
+                <div class="image-preview">
+                    <img src="${e.target.result}" alt="Image preview" class="preview-image">
+                    <div class="preview-overlay">
+                        <span class="material-symbols-rounded preview-cancel-btn">close</span>
+                    </div>
+                </div>
+            `;
             DOMElements.fileUploadWrapper.classList.add("file-uploaded");
             const base64String = e.target.result.split(",")[1];
             state.userData.file = {
@@ -186,6 +193,16 @@ DOMElements.fileInput.addEventListener("change", () => {
                 uri: null,
                 rawFile: null
             };
+            DOMElements.fileUploadWrapper.querySelector(".preview-cancel-btn").addEventListener("click", () => {
+                state.userData.file = {
+                    data: null,
+                    mime_type: null,
+                    uri: null,
+                    rawFile: null
+                };
+                DOMElements.fileUploadWrapper.classList.remove("file-uploaded");
+                DOMElements.fileUploadWrapper.innerHTML = `<label for="file-input" id="file-upload" class="material-symbols-rounded">attach_file</label>`;
+            });
         };
         reader.readAsDataURL(file);
     } else {
@@ -193,6 +210,10 @@ DOMElements.fileInput.addEventListener("change", () => {
     }
     DOMElements.fileInput.value = "";
 });
+
+
+
+
 
 DOMElements.fileCancelButton.addEventListener("click", () => {
     state.userData.file = {
@@ -203,6 +224,7 @@ DOMElements.fileCancelButton.addEventListener("click", () => {
     };
     DOMElements.fileUploadWrapper.classList.remove("file-uploaded");
 });
+
 
 const picker = new EmojiMart.Picker({
     theme: "light",
@@ -284,19 +306,6 @@ DOMElements.voiceAssistButton.addEventListener("click", () => {
         }
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

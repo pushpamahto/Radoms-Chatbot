@@ -1,3 +1,6 @@
+
+// chatHandler.js
+
 import {
     generateBotResponse,
     startPdfUploadProcess
@@ -7,7 +10,9 @@ import {
     messageInput,
     pdfPreviewContainer,
     fileUploadWrapper,
-    voiceAssistButton // Added this import
+    voiceAssistButton,
+    fileInput,
+    fileCancelButton
 } from './domElements.js';
 import {
     createMessageElement,
@@ -15,7 +20,9 @@ import {
     renderPdfMessageFromHistory,
     showLimitExceededMessage,
     showQuestionWarning,
-    initialInputHeight
+    initialInputHeight,
+    createImagePreviewElement,
+    clearPdfPreview
 } from './uiManager.js';
 import {
     saveChatHistory,
@@ -75,6 +82,19 @@ const clearChatMessages = () => {
     messageInput.value = "";
     messageInput.style.height = `${initialInputHeight}px`;
     document.querySelector(".chat-form").style.borderRadius = "32px";
+    clearImagePreview();
+};
+
+const clearImagePreview = () => {
+    state.userData.file = {
+        data: null,
+        mime_type: null,
+        uri: null,
+        rawFile: null
+    };
+    fileUploadWrapper.classList.remove("file-uploaded");
+    pdfPreviewContainer.innerHTML = '';
+    pdfPreviewContainer.style.display = 'none';
 };
 
 const createWelcomeMessage = () => {
@@ -90,7 +110,7 @@ const createWelcomeMessage = () => {
             content: welcomeMessageContent,
             formattedContent: welcomeMessageContent
         });
-        currentChat.lastActive = Date.now();
+         currentChat.lastActive = Date.now();
         saveChatHistory(state);
         renderChatHistory(state, callbacks);
     }
@@ -132,9 +152,9 @@ export const loadChat = (chatId) => {
                 messageDiv = renderPdfMessageFromHistory(msg);
             } else {
                 const content = `
-                        ${msg.content ? `<div class="message-text">${msg.content}</div>` : ''}
-                        ${msg.type === "image" && msg.fileData ? `<img src="data:${msg.mimeType};base64,${msg.fileData}" class="attachment" />` : ""}
-                        <div class="user-message-time">${formatMessageTime(msg.timestamp)}</div>`;
+                    ${msg.content ? `<div class="message-text">${msg.content}</div>` : ''}
+                    ${msg.type === "image" && msg.fileData ? `<img src="data:${msg.mimeType};base64,${msg.fileData}" class="attachment" />` : ""}
+                    <div class="user-message-time">${formatMessageTime(msg.timestamp)}</div>`;
                 messageDiv = createMessageElement(content, "user-message");
             }
         }
@@ -263,6 +283,7 @@ export const handleOutgoingMessage = (e) => {
             mimeType: state.userData.file.mime_type,
             timestamp: Date.now()
         });
+
         const messageHTML = `
             ${state.userData.message ? `<div class="message-text">${state.userData.message}</div>` : ''}
             ${state.userData.file.data ? `<img src="data:${state.userData.file.mime_type};base64,${state.userData.file.data}" class="attachment" />` : ""}
@@ -287,6 +308,31 @@ export const handleOutgoingMessage = (e) => {
     });
 };
 
+export const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            state.userData.file = {
+                data: event.target.result.split(',')[1],
+                mime_type: file.type,
+                uri: event.target.result,
+                rawFile: file
+            };
+            createImagePreviewElement(state.userData.file.uri, file.name);
+            messageInput.focus();
+        };
+        reader.readAsDataURL(file);
+    } else if (file && file.type === 'application/pdf') {
+        state.pendingPdfFile = file;
+        clearImagePreview();
+        createPdfPreviewElement(file.name, file.size);
+    }
+};
+
+export const handleFileCancel = () => {
+    clearImagePreview();
+};
 
 // ========================================================
 // START: CORRECTED VOICE RECOGNITION CODE
@@ -402,6 +448,9 @@ const callbacks = {
     loadChat,
     startNewChat
 };
+
+
+
 
 
 

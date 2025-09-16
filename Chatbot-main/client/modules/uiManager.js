@@ -1,8 +1,11 @@
+
 import {
     chatBody,
     messageInput,
     pdfPreviewContainer,
-    fileUploadWrapper
+    fileUploadWrapper,
+    fileInput,
+    fileCancelButton
 } from './domElements.js';
 import {
     formatFileSize,
@@ -85,6 +88,27 @@ export const renderPdfMessageFromHistory = (msg) => {
     return createMessageElement(content, "user-message");
 };
 
+export const createImagePreviewElement = (imageSrc) => {
+    pdfPreviewContainer.innerHTML = `
+        <div class="image-preview-container">
+            <img src="${imageSrc}" alt="Selected Image" class="image-preview-circle"/>
+            <span class="cancel-image material-symbols-rounded" id="file-cancel">cancel</span>
+        </div>`;
+    fileUploadWrapper.classList.add("file-uploaded");
+    pdfPreviewContainer.style.display = 'flex';
+
+    fileCancelButton.addEventListener('click', () => {
+        clearImagePreview();
+    });
+};
+
+export const clearImagePreview = () => {
+    fileUploadWrapper.classList.remove("file-uploaded");
+    pdfPreviewContainer.innerHTML = '';
+    pdfPreviewContainer.style.display = 'none';
+    fileInput.value = '';
+};
+
 
 export const injectHistoryStyles = () => {
     const style = document.createElement('style');
@@ -92,6 +116,36 @@ export const injectHistoryStyles = () => {
         .chat-history-item-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .chat-time { font-size: 0.75rem; color: #6c757d; flex-shrink: 0; margin-left: 10px; }
         .user-message-time { font-size: 0.7rem; color: #888; text-align: right; margin-top: 5px; padding-right: 10px; }
+        .image-preview-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .image-preview-container .image-preview-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+        }
+        .image-preview-container .cancel-image {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #fff;
+            color: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s linear;
+        }
+        .image-preview-container:hover .cancel-image {
+            visibility: visible;
+            opacity: 1;
+        }
+        
     `;
     document.head.appendChild(style);
 };
@@ -105,7 +159,9 @@ export const clearPdfPreview = (state) => {
 
 
 // Country data - all countries with flags and dial codes
-const countries = [
+
+ const countries = 
+[
     { code: "us", name: "United States", dialCode: "+1", flag: "https://flagcdn.com/w40/us.png" },
     { code: "gb", name: "United Kingdom", dialCode: "+44", flag: "https://flagcdn.com/w40/gb.png" },
     { code: "ca", name: "Canada", dialCode: "+1", flag: "https://flagcdn.com/w40/ca.png" },
@@ -435,6 +491,19 @@ export function initCountrySelector() {
     }
     populateCountryList();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
