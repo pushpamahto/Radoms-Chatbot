@@ -22,7 +22,8 @@ import {
     initCountrySelector,
     injectHistoryStyles,
     clearPdfPreview,
-    initialInputHeight
+    initialInputHeight,
+    clearImagePreview // ## CHANGE 1: IMPORTED THE CORRECT FUNCTION ##
 } from './modules/uiManager.js';
 import * as DOMElements from './modules/domElements.js';
 import {
@@ -178,14 +179,11 @@ DOMElements.fileInput.addEventListener("change", () => {
         const reader = new FileReader();
         reader.onload = (e) => {
             DOMElements.fileUploadWrapper.innerHTML = `
-                <div class="image-preview">
-                    <img src="${e.target.result}" alt="Image preview" class="preview-image">
-                    <div class="preview-overlay">
-                        <span class="material-symbols-rounded preview-cancel-btn">close</span>
-                    </div>
-                </div>
+                <img src="${e.target.result}" alt="Image preview">
+                <button id="file-cancel" class="material-symbols-rounded">close</button>
             `;
             DOMElements.fileUploadWrapper.classList.add("file-uploaded");
+
             const base64String = e.target.result.split(",")[1];
             state.userData.file = {
                 data: base64String,
@@ -193,15 +191,20 @@ DOMElements.fileInput.addEventListener("change", () => {
                 uri: null,
                 rawFile: null
             };
-            DOMElements.fileUploadWrapper.querySelector(".preview-cancel-btn").addEventListener("click", () => {
+
+            // ## CHANGE 2: THIS IS THE FIX ##
+            // The listener for the new cancel button now calls the proper reset function.
+            DOMElements.fileUploadWrapper.querySelector("#file-cancel").addEventListener("click", () => {
+                // Reset state data
                 state.userData.file = {
                     data: null,
                     mime_type: null,
                     uri: null,
                     rawFile: null
                 };
-                DOMElements.fileUploadWrapper.classList.remove("file-uploaded");
-                DOMElements.fileUploadWrapper.innerHTML = `<label for="file-input" id="file-upload" class="material-symbols-rounded">attach_file</label>`;
+                // Reset UI using the dedicated function from uiManager.js. This makes the icon
+                // look correct and restores its click functionality.
+                clearImagePreview();
             });
         };
         reader.readAsDataURL(file);
@@ -213,8 +216,8 @@ DOMElements.fileInput.addEventListener("change", () => {
 
 
 
-
-
+// This listener is for a button that is part of the original HTML structure but gets replaced by the preview.
+// The new preview's cancel button gets its own listener assigned dynamically above.
 DOMElements.fileCancelButton.addEventListener("click", () => {
     state.userData.file = {
         data: null,
@@ -306,6 +309,29 @@ DOMElements.voiceAssistButton.addEventListener("click", () => {
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -669,6 +669,24 @@ body.show-chatbot .chatbot-popup {
     object-fit: cover;
     display: none;
 }
+/* file upload */
+#file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;  
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 22px;   
+    color: rgb(162, 139, 7);    
+    transition: background 0.2s ease;
+}
+
+#file-upload:hover {
+    background: rgba(0, 0, 0, 0.1);  
+}
+
 
 .chat-form .file-upload-wrapper #file-upload {
     display: flex;

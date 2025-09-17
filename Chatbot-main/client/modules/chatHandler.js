@@ -22,7 +22,8 @@ import {
     showQuestionWarning,
     initialInputHeight,
     createImagePreviewElement,
-    clearPdfPreview
+    clearPdfPreview,
+    clearImagePreview // ## CHANGE 1: IMPORTED THE CORRECT FUNCTION ##
 } from './uiManager.js';
 import {
     saveChatHistory,
@@ -85,17 +86,6 @@ const clearChatMessages = () => {
     clearImagePreview();
 };
 
-const clearImagePreview = () => {
-    state.userData.file = {
-        data: null,
-        mime_type: null,
-        uri: null,
-        rawFile: null
-    };
-    fileUploadWrapper.classList.remove("file-uploaded");
-    pdfPreviewContainer.innerHTML = '';
-    pdfPreviewContainer.style.display = 'none';
-};
 
 const createWelcomeMessage = () => {
     const welcomeMessageContent = "Hey there 👋 <br> How can I help you today?";
@@ -274,6 +264,7 @@ export const handleOutgoingMessage = (e) => {
         pdfPreviewContainer.innerHTML = '';
         messageInput.value = "";
         messageInput.dispatchEvent(new Event("input"));
+        clearImagePreview(); // ## FIX 2: EXPLICITLY CALL TO RESTORE THE ATTACH FILE BUTTON ##
     } else {
         currentChat.messages.push({
             sender: "user",
@@ -294,6 +285,7 @@ export const handleOutgoingMessage = (e) => {
         messageInput.value = "";
         fileUploadWrapper.classList.remove("file-uploaded");
         messageInput.dispatchEvent(new Event("input"));
+        clearImagePreview(); // ## FIX 3: EXPLICITLY CALL TO RESTORE THE ATTACH FILE BUTTON ##
     }
 
     currentChat.lastActive = Date.now();
@@ -448,19 +440,3 @@ const callbacks = {
     loadChat,
     startNewChat
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
