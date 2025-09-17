@@ -1,5 +1,6 @@
-export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos"; 
-// export const API_KEY = "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";
+// export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos"; 
+// export const API_KEY = "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"; 
+export const API_KEY = "AIzaSyDwX_69_30Tidk2iKkxEuKMdgMoTu2oKx8";
 
 export const BASE_URL = "http://localhost:3007";
 
@@ -9,7 +10,7 @@ export const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
 export const SAVE_USER_URL = `${BASE_URL}/save-user`;
 
 // Chat Settings
-export const MAX_QUESTIONS_PER_DAY = 3;
+export const MAX_QUESTIONS_PER_DAY = 10000;
 export const CHAT_HISTORY_RETENTION_DAYS = 7;
 
 // Company Information
