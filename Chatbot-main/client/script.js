@@ -202,8 +202,7 @@ DOMElements.fileInput.addEventListener("change", () => {
                     uri: null,
                     rawFile: null
                 };
-                // Reset UI using the dedicated function from uiManager.js. This makes the icon
-                // look correct and restores its click functionality.
+                
                 clearImagePreview();
             });
         };
@@ -214,10 +213,6 @@ DOMElements.fileInput.addEventListener("change", () => {
     DOMElements.fileInput.value = "";
 });
 
-
-
-// This listener is for a button that is part of the original HTML structure but gets replaced by the preview.
-// The new preview's cancel button gets its own listener assigned dynamically above.
 DOMElements.fileCancelButton.addEventListener("click", () => {
     state.userData.file = {
         data: null,

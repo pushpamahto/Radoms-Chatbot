@@ -1,13 +1,15 @@
-// export const API_KEY = "AIzaSyDGK5n3BJtfuy32Jtn5DhLHyJo0GfS6gos"; 
-// export const API_KEY = "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"; 
-export const API_KEY = "AIzaSyDwX_69_30Tidk2iKkxEuKMdgMoTu2oKx8";
+
+// export const API_KEY = "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"; 
+export const API_KEY = "AIzaSyC88xdckY-aUpCiOGSAzD-qvQMk3Xos0o8";
 
 export const BASE_URL = "http://localhost:3007";
 
 // API Endpoints
-export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+// export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 export const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
 export const SAVE_USER_URL = `${BASE_URL}/save-user`;
+
 
 // Chat Settings
 export const MAX_QUESTIONS_PER_DAY = 10000;
