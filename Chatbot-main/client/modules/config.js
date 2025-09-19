@@ -1,5 +1,5 @@
 
-// export const API_KEY = "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"; 
+// export const API_KEY = "AIzaSyCFa6TfomH3wkKHkAnWPmbZRLPlkLr6l24"; 
 export const API_KEY = "AIzaSyC88xdckY-aUpCiOGSAzD-qvQMk3Xos0o8";
 
 export const BASE_URL = "http://localhost:3007";
