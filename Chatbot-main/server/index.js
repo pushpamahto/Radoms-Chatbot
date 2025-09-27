@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
+
 // API endpoint to save user data
 app.post('/save-user', async (req, res) => {
   console.log("Hi");

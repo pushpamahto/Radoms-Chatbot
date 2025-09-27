@@ -9,7 +9,6 @@ import {
     CHAT_HISTORY_RETENTION_DAYS
 } from './config.js';
 
-
 export const saveChatHistory = (state) => {
     if (!state.userInfo || !state.userInfo.email) return;
     const chatsToSave = state.chatHistory.filter(chat => {

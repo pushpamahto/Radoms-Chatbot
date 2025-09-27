@@ -1,15 +1,12 @@
 
-// export const API_KEY = "AIzaSyCFa6TfomH3wkKHkAnWPmbZRLPlkLr6l24"; 
-export const API_KEY = "AIzaSyC88xdckY-aUpCiOGSAzD-qvQMk3Xos0o8";
-
+// config.js
+export const  API_KEY = "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";
 export const BASE_URL = "http://localhost:3007";
 
 // API Endpoints
-// export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
-export const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-export const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`;
+export const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+export const FILE_API_BASE_URL = `https://generativelanguage.googleapis.com`; // This remains for Google's file upload API
 export const SAVE_USER_URL = `${BASE_URL}/save-user`;
-
 
 // Chat Settings
 export const MAX_QUESTIONS_PER_DAY = 10000;
@@ -76,5 +73,5 @@ We maintain clear communication throughout the development process, so if you ne
 
 How can i contact regarding project?
 You can reach us via phone at +91 94157 70571 or email us at info@radomsdigital.com. Feel free to get in touch with us regarding your project!
-
 `;
+

@@ -43,4 +43,3 @@ export const chatForm = document.querySelector(".chat-form");
 
 
 
-

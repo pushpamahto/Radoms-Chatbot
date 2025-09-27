@@ -212,60 +212,68 @@ export const handleOutgoingMessage = (e) => {
         currentChat = state.chatHistory.find(chat => chat.id === state.currentChatId);
     }
 
-    if (state.pendingPdfFile) {
-        const messageId = `msg_${Date.now()}`;
-        const messageData = {
-            id: messageId,
-            sender: "user",
-            type: "pdf",
-            content: state.userData.message,
-            fileName: state.pendingPdfFile.name,
-            fileSize: state.pendingPdfFile.size,
-            fileUri: null,
-            timestamp: Date.now()
-        };
-        currentChat.messages.push(messageData);
+   // In the handleOutgoingMessage function, update the PDF handling section:
 
-        const pdfUploadHTML = createPdfUploadElement(messageId, state.pendingPdfFile.name, state.pendingPdfFile.size);
-        const messageHTML = `
-            ${state.userData.message ? `<div class="message-text">${state.userData.message}</div>` : ''}
-            ${pdfUploadHTML}
-            <div class="user-message-time">${formatMessageTime(Date.now())}</div>`;
+// ... existing code ...
 
-        const outgoingMessageDiv = createMessageElement(messageHTML, "user-message");
-        chatBody.appendChild(outgoingMessageDiv);
+if (state.pendingPdfFile) {
+    const messageId = `msg_${Date.now()}`;
+    const messageData = {
+        id: messageId,
+        sender: "user",
+        type: "pdf",
+        content: state.userData.message,
+        fileName: state.pendingPdfFile.name,
+        fileSize: state.pendingPdfFile.size,
+        fileUri: "file_uploaded", // Changed since we're not storing actual file URI
+        timestamp: Date.now()
+    };
+    currentChat.messages.push(messageData);
 
-        const pdfUploadCallbacks = {
-            onSuccess: (fileUri, userQuery, file) => {
-                const msgToUpdate = currentChat?.messages.find(msg => msg.id === messageId);
-                if (msgToUpdate) {
-                    msgToUpdate.fileUri = fileUri;
-                    saveChatHistory(state);
-                }
-                state.userData.message = userQuery || `The user uploaded a file named "${file.name}". Please provide a brief summary of this document.`;
-                state.userData.file = {
-                    uri: fileUri,
-                    mime_type: file.type,
-                    data: null,
-                    rawFile: null
-                };
-                setTimeout(() => {
-                    chatBody.scrollTo({
-                        top: chatBody.scrollHeight,
-                        behavior: "smooth"
-                    });
-                }, 100);
-                handleBotResponse();
+    const pdfUploadHTML = createPdfUploadElement(messageId, state.pendingPdfFile.name, state.pendingPdfFile.size);
+    const messageHTML = `
+        ${state.userData.message ? `<div class="message-text">${state.userData.message}</div>` : ''}
+        ${pdfUploadHTML}
+        <div class="user-message-time">${formatMessageTime(Date.now())}</div>`;
+
+    const outgoingMessageDiv = createMessageElement(messageHTML, "user-message");
+    chatBody.appendChild(outgoingMessageDiv);
+
+    const pdfUploadCallbacks = {
+        onSuccess: (fileUri, userQuery, file) => {
+            const msgToUpdate = currentChat?.messages.find(msg => msg.id === messageId);
+            if (msgToUpdate) {
+                msgToUpdate.fileUri = fileUri;
+                saveChatHistory(state);
             }
-        };
-        startPdfUploadProcess(state.pendingPdfFile, messageId, state.userData.message, state, pdfUploadCallbacks);
-        state.pendingPdfFile = null;
-        pdfPreviewContainer.style.display = 'none';
-        pdfPreviewContainer.innerHTML = '';
-        messageInput.value = "";
-        messageInput.dispatchEvent(new Event("input"));
-        clearImagePreview(); // ## FIX 2: EXPLICITLY CALL TO RESTORE THE ATTACH FILE BUTTON ##
-    } else {
+            // For OpenRouter, we can't process the file content, so we'll use a text description
+            state.userData.message = userQuery || `The user uploaded a file named "${file.name}". Please ask what they want to know about this document.`;
+            state.userData.file = {
+                uri: fileUri,
+                mime_type: file.type,
+                data: null,
+                rawFile: null
+            };
+            setTimeout(() => {
+                chatBody.scrollTo({
+                    top: chatBody.scrollHeight,
+                    behavior: "smooth"
+                });
+            }, 100);
+            handleBotResponse();
+        }
+    };
+    startPdfUploadProcess(state.pendingPdfFile, messageId, state.userData.message, state, pdfUploadCallbacks);
+    state.pendingPdfFile = null;
+    pdfPreviewContainer.style.display = 'none';
+    pdfPreviewContainer.innerHTML = '';
+    messageInput.value = "";
+    messageInput.dispatchEvent(new Event("input"));
+    clearImagePreview();
+} else {
+    // ... rest of the function remains the same
+        
+                
         currentChat.messages.push({
             sender: "user",
             type: state.userData.file.data ? "image" : "text",
